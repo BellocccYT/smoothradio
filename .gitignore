@@ -1,0 +1,16 @@
+node_modules/
+out/
+dist/
+preview/
+promo/node_modules/
+promo/renders/
+promo/.hyperframes/
+promo/assets/raw/
+promo/check.json
+*.log
+.DS_Store
+Thumbs.db
+
+promo/.thumbnails/
+promo/.transcode-cache/
+promo/.waveform-cache/

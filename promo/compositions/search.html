@@ -1,0 +1,178 @@
+<template>
+  <style>
+    @font-face {
+      font-family: 'Space Grotesk';
+      src: url('assets/fonts/space-grotesk.woff2') format('woff2');
+      font-weight: 300 700;
+      font-style: normal;
+      font-display: block;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #050509;
+      font-family: Inter, sans-serif;
+      color: #fff;
+    }
+    #search-frame {
+      position: absolute;
+      inset: 0;
+      transform-origin: 50% 50%;
+    }
+    #search-card {
+      pointer-events: none;
+    }
+    #search-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #search-scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to top, rgba(5, 5, 9, 0.88) 0%, rgba(5, 5, 9, 0.35) 26%, transparent 48%),
+        linear-gradient(to right, rgba(5, 5, 9, 0.4) 0%, transparent 34%);
+      pointer-events: none;
+    }
+    #search-flash {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(60% 60% at 50% 45%, rgba(220, 255, 250, 0.5), transparent 70%);
+      pointer-events: none;
+    }
+    #search-card {
+      position: absolute;
+      left: 300px;
+      bottom: 132px;
+      width: 566px;
+    }
+    .copy-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 22px;
+      background: linear-gradient(160deg, rgba(18, 18, 27, 0.9), rgba(8, 8, 13, 0.86));
+      padding: 26px 30px 27px;
+      box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(24px) saturate(140%);
+    }
+    .copy-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 22px;
+      bottom: 22px;
+      width: 2px;
+      background: linear-gradient(180deg, #5eead4, #38bdf8);
+      opacity: 0.85;
+    }
+    .copy-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .copy-icon {
+      display: grid;
+      place-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: rgba(94, 234, 212, 0.1);
+      border: 1px solid rgba(94, 234, 212, 0.18);
+      color: #5eead4;
+    }
+    .copy-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(94, 234, 212, 0.8);
+    }
+    .copy-title {
+      font-family: 'Space Grotesk', Inter, sans-serif;
+      font-size: 38px;
+      line-height: 1.06;
+      font-weight: 600;
+      letter-spacing: -0.035em;
+      color: #fff;
+    }
+    .copy-sub {
+      margin-top: 9px;
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.56);
+    }
+    .copy-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.46);
+    }
+    .copy-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #5eead4;
+      box-shadow: 0 0 10px rgba(94, 234, 212, 0.8);
+    }
+  </style>
+
+  <div id="root" data-composition-id="search" data-width="1920" data-height="1080">
+    <div id="search-frame" data-layout-allow-overflow>
+      <video
+        id="search-video"
+        src="assets/search.mp4"
+        class="clip"
+        data-start="0"
+        data-duration="6.733"
+        data-track-index="1"
+        muted
+        playsinline
+      ></video>
+    </div>
+    <div id="search-scrim"></div>
+    <div id="search-flash"></div>
+
+    <div id="search-card" class="clip" data-start="0.45" data-duration="5.65" data-track-index="3">
+      <div id="search-inner" class="copy-card">
+        <div class="copy-top">
+          <span class="copy-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+          </span>
+          <span class="copy-eyebrow" data-layout-ignore>50.000+ Sender</span>
+        </div>
+        <p class="copy-title">Einfach finden.</p>
+        <p class="copy-sub" data-layout-ignore>Name, Genre oder Stadt — ein Suchfeld reicht. Kein Algorithmus, nur Radio.</p>
+        <div class="copy-meta" data-layout-ignore>
+          <span class="copy-dot"></span>
+          <span>Live aus der ganzen Welt</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    ;(() => {
+      const tl = gsap.timeline({ paused: true })
+      tl.fromTo('#search-frame', { scale: 1.035 }, { scale: 1, duration: 6.73, ease: 'none' }, 0)
+        .fromTo('#search-flash', { opacity: 0.55 }, { opacity: 0, duration: 0.55, ease: 'power2.out' }, 0)
+        .fromTo('#search-inner', { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.5)
+        .to('#search-inner', { opacity: 0, y: -16, duration: 0.38, ease: 'power2.in' }, 5.72)
+        .to('#search-scrim', { opacity: 0.6, duration: 0.5, ease: 'power1.in' }, 6.23)
+      window.__timelines['search'] = tl
+    })()
+  </script>
+</template>

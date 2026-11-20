@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="180" y1="60" x2="880" y2="990" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#15151d"/>
+      <stop offset="0.52" stop-color="#0b0b11"/>
+      <stop offset="1" stop-color="#060609"/>
+    </linearGradient>
+    <linearGradient id="flow" x1="290" y1="760" x2="740" y2="260" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5EEAD4"/>
+      <stop offset="0.34" stop-color="#38BDF8"/>
+      <stop offset="0.68" stop-color="#818CF8"/>
+      <stop offset="1" stop-color="#C084FC"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="512" cy="450" r="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8" stop-opacity="0.22"/>
+      <stop offset="0.55" stop-color="#7C3AED" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="bloom" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="36"/>
+    </filter>
+    <clipPath id="tile">
+      <rect width="1024" height="1024" rx="236"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#tile)">
+    <rect width="1024" height="1024" fill="url(#bg)"/>
+    <circle cx="512" cy="450" r="440" fill="url(#halo)"/>
+
+    <circle cx="512" cy="512" r="356" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="2"/>
+    <circle cx="512" cy="512" r="400" fill="none" stroke="#8EE7FF" stroke-opacity="0.15" stroke-width="3"
+            stroke-linecap="round" stroke-dasharray="1 26"/>
+
+    <g transform="rotate(-8 512 512)">
+      <path d="M 706 300 C 706 174 358 174 358 366 C 358 492 666 470 666 612 C 666 792 318 798 318 656"
+            stroke="url(#flow)" stroke-width="106" stroke-linecap="round" fill="none"
+            filter="url(#bloom)" opacity="0.6"/>
+      <path d="M 706 300 C 706 174 358 174 358 366 C 358 492 666 470 666 612 C 666 792 318 798 318 656"
+            stroke="url(#flow)" stroke-width="88" stroke-linecap="round" fill="none"/>
+    </g>
+  </g>
+
+  <rect x="1" y="1" width="1022" height="1022" rx="235" fill="none" stroke="#ffffff" stroke-opacity="0.09" stroke-width="2"/>
+</svg>

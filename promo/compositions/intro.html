@@ -1,0 +1,138 @@
+<template>
+  <style>
+    @font-face {
+      font-family: 'Space Grotesk';
+      src: url('assets/fonts/space-grotesk.woff2') format('woff2');
+      font-weight: 300 700;
+      font-style: normal;
+      font-display: block;
+    }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #050509;
+      font-family: Inter, sans-serif;
+      color: #fff;
+    }
+    .intro-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(58% 58% at 50% 44%, rgba(56, 189, 248, 0.14), transparent 62%),
+        radial-gradient(42% 42% at 72% 26%, rgba(192, 132, 252, 0.12), transparent 70%),
+        radial-gradient(40% 40% at 22% 76%, rgba(94, 234, 212, 0.08), transparent 72%),
+        #050509;
+    }
+    .intro-grid {
+      position: absolute;
+      inset: -2px;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+      background-size: 80px 80px;
+      -webkit-mask-image: radial-gradient(circle at 50% 46%, black 0%, transparent 72%);
+      mask-image: radial-gradient(circle at 50% 46%, black 0%, transparent 72%);
+    }
+    .intro-glow {
+      position: absolute;
+      left: 50%;
+      top: 46%;
+      width: 640px;
+      height: 640px;
+      margin-left: -320px;
+      margin-top: -320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(94, 234, 212, 0.2), rgba(56, 189, 248, 0.09) 42%, transparent 70%);
+    }
+    .intro-ring {
+      position: absolute;
+      left: 50%;
+      top: 43%;
+      width: 430px;
+      height: 430px;
+      margin-left: -215px;
+      margin-top: -215px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+    }
+    .intro-ring::after {
+      content: '';
+      position: absolute;
+      inset: 26px;
+      border: 1px dashed rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+    .intro-wrap {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 20px;
+    }
+    .intro-logo {
+      width: 188px;
+      height: 188px;
+      border-radius: 26%;
+      box-shadow: 0 34px 100px -22px rgba(56, 189, 248, 0.55);
+    }
+    .intro-word {
+      margin-top: 38px;
+      font-family: 'Space Grotesk', Inter, sans-serif;
+      font-size: 84px;
+      font-weight: 600;
+      letter-spacing: -0.045em;
+      line-height: 1;
+      color: #fff;
+    }
+    .intro-word span {
+      color: rgba(255, 255, 255, 0.38);
+    }
+    .intro-tag {
+      margin-top: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: rgba(94, 234, 212, 0.82);
+    }
+    .intro-line {
+      margin-top: 26px;
+      width: 86px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transform-origin: center;
+    }
+  </style>
+
+  <div id="root" data-composition-id="intro" data-width="1920" data-height="1080">
+    <div class="intro-bg"></div>
+    <div class="intro-grid"></div>
+    <div id="intro-glow" class="intro-glow"></div>
+    <div id="intro-ring" class="intro-ring"></div>
+
+    <div class="intro-wrap">
+      <img id="intro-logo" class="intro-logo" src="assets/logo.png" alt="SmoothRadio" />
+      <h1 id="intro-word" class="intro-word">Smooth<span>Radio</span></h1>
+      <p id="intro-tag" class="intro-tag" data-layout-ignore>Radio, aber smooth.</p>
+      <div id="intro-line" class="intro-line"></div>
+    </div>
+  </div>
+
+  <script>
+    ;(() => {
+      const tl = gsap.timeline({ paused: true })
+      tl.fromTo('#intro-glow', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 1.5, ease: 'power2.out' }, 0)
+        .fromTo('#intro-ring', { opacity: 0, scale: 0.72 }, { opacity: 1, scale: 1, duration: 1.2, ease: 'expo.out' }, 0.1)
+        .fromTo('#intro-logo', { scale: 0.8, rotate: -6 }, { scale: 1, rotate: 0, duration: 1.05, ease: 'expo.out' }, 0)
+        .fromTo('#intro-word', { opacity: 0, y: 26, filter: 'blur(10px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.65, ease: 'power3.out' }, 0.72)
+        .fromTo('#intro-tag', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out' }, 1.18)
+        .fromTo('#intro-line', { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.85, ease: 'power3.inOut' }, 1.05)
+        .fromTo('#intro-logo', { y: 0 }, { y: -7, duration: 1.5, ease: 'sine.inOut' }, 1.35)
+        .to('#root', { opacity: 0, duration: 0.22, ease: 'power1.in' }, 2.78)
+      window.__timelines['intro'] = tl
+    })()
+  </script>
+</template>

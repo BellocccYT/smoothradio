@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>SmoothRadio — Promo</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #050509;
+        font-family: Inter, sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #050509;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="22.7"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div
+        id="intro"
+        data-composition-id="intro"
+        data-composition-src="compositions/intro.html"
+        data-start="0"
+        data-duration="3"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <div
+        id="search"
+        data-composition-id="search"
+        data-composition-src="compositions/search.html"
+        data-start="3"
+        data-duration="6.733"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <div
+        id="player"
+        data-composition-id="player"
+        data-composition-src="compositions/player.html"
+        data-start="9.733"
+        data-duration="7.467"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <div
+        id="outro"
+        data-composition-id="outro"
+        data-composition-src="compositions/outro.html"
+        data-start="17.2"
+        data-duration="5.5"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1920"
+        data-height="1080"
+      ></div>
+
+      <audio
+        id="bgm"
+        src="assets/audio/bed.wav"
+        data-start="0"
+        data-duration="22.7"
+        data-track-index="3"
+        data-volume="0.85"
+      ></audio>
+      <audio
+        id="whoosh"
+        src="assets/audio/whoosh.wav"
+        data-start="9.2"
+        data-duration="0.8"
+        data-track-index="4"
+        data-volume="0.5"
+      ></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {}
+      window.__timelines['main'] = gsap.timeline({ paused: true })
+    </script>
+  </body>
+</html>

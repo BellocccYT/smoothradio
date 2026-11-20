@@ -1,0 +1,42 @@
+appId: com.smoothradio.app
+productName: SmoothRadio
+copyright: Copyright © 2026 SmoothRadio
+directories:
+  buildResources: build
+  output: dist
+files:
+  - out/**
+  - package.json
+extraResources:
+  - from: resources
+    to: .
+    filter:
+      - '**/*'
+asar: true
+compression: normal
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+    - target: portable
+      arch:
+        - x64
+  icon: build/icon.ico
+  artifactName: ${productName}-${version}-${arch}.${ext}
+nsis:
+  oneClick: true
+  perMachine: false
+  allowElevation: false
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: SmoothRadio
+  runAfterFinish: true
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  installerHeaderIcon: build/icon.ico
+  deleteAppDataOnUninstall: false
+portable:
+  artifactName: ${productName}-${version}-Portable.${ext}
+  splashImage: null
+publish: null
