@@ -1,4 +1,5 @@
 import { spawn, spawnSync } from 'node:child_process'
+import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -120,6 +121,10 @@ try {
     })
     console.log(`T+${second}s`, JSON.stringify(probe.result.value))
   }
+
+  const shot = await send('Page.captureScreenshot', { format: 'png' })
+  fs.writeFileSync(path.join(root, 'preview', 'wdr-metadata.png'), Buffer.from(shot.data, 'base64'))
+  console.log('Saved preview/wdr-metadata.png')
 } catch (error) {
   console.error('FAILED', error)
 } finally {
