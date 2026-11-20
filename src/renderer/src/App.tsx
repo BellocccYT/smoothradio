@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { usePlayer } from './store/player'
 import { bridge } from './lib/bridge'
+import { syncMetadata } from './lib/metadata'
 import { getAccent } from './lib/accents'
 import { isHlsUrl } from './lib/utils'
 import { audioEngine } from './lib/audio'
@@ -77,20 +78,21 @@ export function App(): React.JSX.Element {
     audioEngine.setVolume(muted ? 0 : volume)
   }, [volume, muted])
 
-  useEffect(() => bridge.metadata.onTrack((track) => usePlayer.getState().setNowPlaying(track)), [])
+  useEffect(
+    () =>
+      bridge.metadata.onTrack((track) => {
+        usePlayer.getState().setNowPlaying(track)
+      }),
+    []
+  )
 
   useEffect(() => {
-    if (!current) return
-    usePlayer.getState().setNowPlaying(null)
-    if (current.hls || isHlsUrl(current.url)) return
-    // Let the audio connection settle first — keeps picky icecast servers happy.
-    const timer = setTimeout(() => {
-      void bridge.metadata.subscribe(current.url)
-    }, 1600)
-    return () => {
-      clearTimeout(timer)
-      void bridge.metadata.unsubscribe()
+    if (!current) {
+      syncMetadata(null)
+      return
     }
+    usePlayer.getState().setNowPlaying(null)
+    syncMetadata(current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current?.id])
 
@@ -291,3 +293,4 @@ export function App(): React.JSX.Element {
     </div>
   )
 }
+

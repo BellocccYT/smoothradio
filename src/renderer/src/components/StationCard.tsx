@@ -59,9 +59,9 @@ export function StationCard({ station, queue, compact = false }: StationCardProp
         {!compact && (
           <>
             <div className="absolute left-2.5 top-2.5 flex items-center gap-1.5">
-              {station.bitrate ? (
+              {station.bitrate || station.hls ? (
                 <span className="rounded-full border border-white/10 bg-black/45 px-2 py-0.5 text-[9.5px] font-medium uppercase tracking-wider text-white/70 backdrop-blur-md">
-                  {formatBitrate(station.bitrate, station.codec)}
+                  {formatBitrate(station.bitrate, station.codec, station.hls)}
                 </span>
               ) : null}
             </div>

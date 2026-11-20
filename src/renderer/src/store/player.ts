@@ -88,7 +88,9 @@ export const usePlayer = create<PlayerState>()(
             isPlaying: true,
             isLoading: true,
             error: null,
-            nowPlaying: null,
+            // Starting the same station again (e.g. after a restart) must not
+            // throw away a title that the metadata service already resolved.
+            nowPlaying: state.current?.id === station.id ? state.nowPlaying : null,
             sessionStartedAt: Date.now(),
             recents: [station, ...state.recents.filter((item) => item.id !== station.id)].slice(0, 30)
           }

@@ -43,14 +43,28 @@ function parseTrack(raw: string): TrackMetadata {
   return { raw: cleaned }
 }
 
-function readStreamTitle(url: string, redirects = 0): Promise<string | null> {
+function readStreamTitle(url: string, redirects = 0, signal?: AbortSignal): Promise<string | null> {
   return new Promise((resolve) => {
     let settled = false
-    const finish = (value: string | null): void => {
+    let request: http.ClientRequest | null = null
+
+    function finish(value: string | null): void {
       if (settled) return
       settled = true
+      signal?.removeEventListener('abort', onAbort)
       resolve(value)
     }
+
+    function onAbort(): void {
+      request?.destroy()
+      finish(null)
+    }
+
+    if (signal?.aborted) {
+      finish(null)
+      return
+    }
+    signal?.addEventListener('abort', onAbort, { once: true })
 
     let parsed: URL
     try {
@@ -61,7 +75,6 @@ function readStreamTitle(url: string, redirects = 0): Promise<string | null> {
     }
 
     const transport = parsed.protocol === 'https:' ? https : http
-    let request: http.ClientRequest
     try {
       request = transport.get(
         parsed,
@@ -79,7 +92,7 @@ function readStreamTitle(url: string, redirects = 0): Promise<string | null> {
           if (status >= 300 && status < 400 && response.headers.location && redirects < 5) {
             response.resume()
             response.destroy()
-            readStreamTitle(new URL(response.headers.location, parsed).toString(), redirects + 1).then(finish)
+            readStreamTitle(new URL(response.headers.location, parsed).toString(), redirects + 1, signal).then(finish)
             return
           }
           if (status >= 400) {
@@ -135,11 +148,16 @@ function readStreamTitle(url: string, redirects = 0): Promise<string | null> {
       return
     }
 
-    request.on('timeout', () => {
-      request.destroy()
+    if (!request) {
+      finish(null)
+      return
+    }
+    const req = request
+    req.on('timeout', () => {
+      req.destroy()
       finish(null)
     })
-    request.on('error', () => finish(null))
+    req.on('error', () => finish(null))
   })
 }
 
@@ -147,12 +165,15 @@ class MetadataService extends EventEmitter {
   private url: string | null = null
   private timer: NodeJS.Timeout | null = null
   private retryTimer: NodeJS.Timeout | null = null
+  private controller: AbortController | null = null
   private retries = 0
   private lastRaw = ''
   private inFlight = false
 
   subscribe(url: string): void {
+    if (this.url === url && this.timer) return
     this.stopPolling()
+    this.abortInFlight()
     this.url = url
     this.lastRaw = ''
     this.retries = 0
@@ -163,8 +184,10 @@ class MetadataService extends EventEmitter {
       if (this.inFlight) return
       this.inFlight = true
       const current = this.url
+      const controller = new AbortController()
+      this.controller = controller
       try {
-        const title = await readStreamTitle(current)
+        const title = await readStreamTitle(current, 0, controller.signal)
         if (this.url !== current) return
         if (!title) {
           // The first connection often races with the audio stream on busy
@@ -184,7 +207,10 @@ class MetadataService extends EventEmitter {
       } catch {
         // metadata is best-effort
       } finally {
-        this.inFlight = false
+        if (this.controller === controller) {
+          this.controller = null
+          this.inFlight = false
+        }
       }
     }
 
@@ -197,6 +223,15 @@ class MetadataService extends EventEmitter {
     this.lastRaw = ''
     this.retries = 0
     this.stopPolling()
+    this.abortInFlight()
+  }
+
+  private abortInFlight(): void {
+    if (this.controller) {
+      this.controller.abort()
+      this.controller = null
+    }
+    this.inFlight = false
   }
 
   private clearRetry(): void {

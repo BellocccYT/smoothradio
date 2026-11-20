@@ -13,7 +13,7 @@ import {
   VolumeX
 } from 'lucide-react'
 import { usePlayer } from '../store/player'
-import { cn } from '../lib/utils'
+import { cn, formatBitrate } from '../lib/utils'
 import { Artwork } from './Artwork'
 import { Marquee } from './Marquee'
 import { Visualizer } from './Visualizer'
@@ -141,7 +141,7 @@ export function PlayerBar({ onOpenSettings }: { onOpenSettings: () => void }): R
             </button>
           </div>
           <span className="text-[8.5px] font-medium uppercase tracking-[0.22em] text-white/22">
-            {current?.bitrate ? `${current.bitrate} kbps` : 'Live Radio'}
+            {current ? formatBitrate(current.bitrate, current.codec, current.hls) : 'Live Radio'}
           </span>
         </div>
 

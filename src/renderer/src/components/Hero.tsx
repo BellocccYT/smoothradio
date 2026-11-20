@@ -95,7 +95,7 @@ export function Hero(): React.JSX.Element {
             {current ? (
               <>
                 <span className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45">
-                  {formatBitrate(current.bitrate, current.codec)}
+                  {formatBitrate(current.bitrate, current.codec, current.hls)}
                 </span>
                 <span className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45">
                   {current.country ?? 'Weltweit'}

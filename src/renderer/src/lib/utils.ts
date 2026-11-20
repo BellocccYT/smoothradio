@@ -44,10 +44,11 @@ export function isPlaylistUrl(url: string): boolean {
   return /\.(pls|m3u|xspf|asx)(\?|$)/i.test(url)
 }
 
-export function formatBitrate(bitrate?: number, codec?: string): string {
-  const codecLabel = (codec || '').toUpperCase().replace('MP3', 'MP3').replace('AAC', 'AAC')
-  if (bitrate && bitrate > 0) return `${bitrate} kbps${codecLabel ? ` · ${codecLabel}` : ''}`
-  if (codecLabel) return codecLabel
+export function formatBitrate(bitrate?: number, codec?: string, hls?: boolean): string {
+  if (hls) return bitrate && bitrate > 0 ? `${bitrate} kbps · HLS` : 'HLS'
+  const codecLabel = (codec || '').toUpperCase()
+  if (bitrate && bitrate > 0) return `${bitrate} kbps${codecLabel && codecLabel !== 'UNKNOWN' ? ` · ${codecLabel}` : ''}`
+  if (codecLabel && codecLabel !== 'UNKNOWN') return codecLabel
   return 'Live'
 }
 

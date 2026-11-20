@@ -12,7 +12,7 @@ Ein moderner Desktop-Radio-Client für Windows — handverlesene Sender, Live-Me
 
 - **Entdecken** — kuratierte Sender (SomaFM, Radio Paradise, FIP, KEXP, 1LIVE, DLF, Nightride …) plus ~50.000 Sender über die Radio-Browser-API
 - **Suche & Genres** — nach Name, Stadt oder Stimmung; acht Genre-Welten
-- **Live-Metadaten** — aktuelle Songs via ICY-StreamTitle, automatisch alle 20 s aktualisiert
+- **Live-Metadaten** — aktuelle Songs via ICY-StreamTitle, automatisch aktualisiert; HLS-Sender wie WDR 2 nutzen automatisch einen MP3-Spiegel
 - **Discord Rich Presence** — Sender, Song und Live-Status im Discord-Profil, inkl. Sender-Button
 - **Favoriten, Verlauf, eigene Streams** — lokal gespeichert, kein Konto nötig
 - **Fullscreen-Player** — ein immersiver Now-Playing-Modus mit riesigem Vinyl-Artwork, Live-Spektrum, Queue und Discord-Status (`F`)
@@ -45,8 +45,8 @@ npm run dist
 
 Ergebnis in `dist/`:
 
-- `SmoothRadio-1.0.0-x64.exe` — One-Click-Installer, per Benutzer (keine Adminrechte, Desktop-Shortcut)
-- `SmoothRadio-1.0.0-Portable.exe` — portable Version ohne Installation
+- `SmoothRadio-1.0.1-x64.exe` — One-Click-Installer, per Benutzer (keine Adminrechte, Desktop-Shortcut)
+- `SmoothRadio-1.0.1-Portable.exe` — portable Version ohne Installation
 
 Die EXE ist **nicht code-signiert**. Windows SmartScreen zeigt beim ersten Start ggf. „Unbekannter Herausgeber" → *Weitere Informationen* → *Trotzdem ausführen*.
 

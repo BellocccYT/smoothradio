@@ -214,7 +214,7 @@ export function FullscreenPlayer(): React.JSX.Element {
 
             <div className="mt-4 flex flex-wrap gap-1.5">
               {[
-                current ? formatBitrate(current.bitrate, current.codec) : '24/7 live',
+                current ? formatBitrate(current.bitrate, current.codec, current.hls) : '24/7 live',
                 ...(current ? current.tags.slice(0, 3) : ['Ohne Konto', 'Handverlesen', 'Discord RPC'])
               ].map((tag) => (
                 <span

@@ -25,7 +25,9 @@ interface RawStation {
 }
 
 const cache = new Map<string, { at: number; stations: Station[] }>()
+const mirrorCache = new Map<string, { at: number; url: string | null }>()
 const CACHE_TTL = 3 * 60 * 1000
+const MIRROR_TTL = 10 * 60 * 1000
 
 function mapStation(raw: RawStation): Station | null {
   const url = (raw.url_resolved || raw.url || '').trim()
@@ -127,6 +129,47 @@ export async function searchStations(query: string, limit = 48): Promise<Station
   return (await request(`/json/stations/search?${tagParams.toString()}`)).slice(0, limit)
 }
 
+/**
+ * HLS radio streams often have no ICY metadata. Radio-Browser usually knows
+ * an MP3 mirror of the same station, which does. Use it only for metadata,
+ * playback stays on the original (higher quality) stream.
+ */
+export async function findIcyMirror(station: Station): Promise<string | null> {
+  const key = station.name.toLowerCase()
+  const cached = mirrorCache.get(key)
+  if (cached && Date.now() - cached.at < MIRROR_TTL) return cached.url
+
+  const query = station.name.replace(/\s*\(\s*\d+\s*kbps[^)]*\)/gi, '').trim()
+  const params = new URLSearchParams({
+    name: query || station.name,
+    limit: '30',
+    hidebroken: 'true',
+    order: 'clickcount',
+    reverse: 'true'
+  })
+
+  try {
+    const candidates = await request(`/json/stations/search?${params.toString()}`)
+    const usable = candidates.filter(
+      (candidate) =>
+        candidate.id !== station.id &&
+        !candidate.hls &&
+        !isPlaylistUrl(candidate.url) &&
+        candidate.url !== station.url
+    )
+    const https = usable.filter((candidate) => candidate.url.startsWith('https://'))
+    const mp3 =
+      https.find((candidate) => /\.mp3(\?|$)/i.test(candidate.url) || /mp3/i.test(candidate.codec ?? '')) ??
+      usable.find((candidate) => /\.mp3(\?|$)/i.test(candidate.url) || /mp3/i.test(candidate.codec ?? ''))
+    const mirror = mp3 ?? https[0] ?? usable[0] ?? null
+    mirrorCache.set(key, { at: Date.now(), url: mirror?.url ?? null })
+    return mirror?.url ?? null
+  } catch {
+    mirrorCache.set(key, { at: Date.now(), url: null })
+    return null
+  }
+}
+
 export async function fetchByTag(tag: string, limit = 60): Promise<Station[]> {
   const params = new URLSearchParams({
     tag,
@@ -137,3 +180,4 @@ export async function fetchByTag(tag: string, limit = 60): Promise<Station[]> {
   })
   return (await request(`/json/stations/search?${params.toString()}`, 5 * 60 * 1000)).slice(0, limit)
 }
+
