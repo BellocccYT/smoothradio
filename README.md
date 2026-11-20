@@ -4,6 +4,10 @@ Ein moderner Desktop-Radio-Client für Windows — handverlesene Sender, Live-Me
 
 ![SmoothRadio](docs/screenshot.png)
 
+## Download
+
+[**Windows-Installer & Portable herunterladen**](https://github.com/BellocccYT/smoothradio/releases/latest) · [Zum Quellcode](https://github.com/BellocccYT/smoothradio)
+
 ## Features
 
 - **Entdecken** — kuratierte Sender (SomaFM, Radio Paradise, FIP, KEXP, 1LIVE, DLF, Nightride …) plus ~50.000 Sender über die Radio-Browser-API
