@@ -15,16 +15,16 @@ export function GenreView(): React.JSX.Element {
 
   if (!genre) {
     return (
-      <div className="px-7 pb-8">
+      <div className="px-4 pb-8 sm:px-7">
         <p className="text-[13px] text-white/40">Diese Stimmung gibt es nicht (mehr).</p>
       </div>
     )
   }
 
   return (
-    <div className="px-7 pb-8">
+    <div className="px-4 pb-8 sm:px-7">
       <div
-        className="relative overflow-hidden rounded-[26px] border border-white/[0.07] px-7 py-7"
+        className="relative overflow-hidden rounded-[26px] border border-white/[0.07] px-5 py-6 sm:px-7 sm:py-7"
         style={{ background: `linear-gradient(120deg, ${genre.from}22 0%, ${genre.to}0d 55%, rgba(8,8,13,0.5) 100%)` }}
       >
         <div

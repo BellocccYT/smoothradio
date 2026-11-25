@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
 import { usePlayer } from './store/player'
-import { bridge } from './lib/bridge'
+import { bridge, isDesktop } from './lib/bridge'
 import { syncMetadata } from './lib/metadata'
 import { getAccent } from './lib/accents'
 import { isHlsUrl } from './lib/utils'
 import { audioEngine } from './lib/audio'
+import { BRAND } from '@shared/brand'
 import { TitleBar } from './components/TitleBar'
 import { Sidebar, focusSearch } from './components/Sidebar'
+import { MobileNav } from './components/MobileNav'
 import { Header } from './components/Header'
 import { PlayerBar } from './components/PlayerBar'
 import { Toast } from './components/Toast'
 import { SettingsDialog } from './components/SettingsDialog'
 import { AddStreamDialog } from './components/AddStreamDialog'
+import { LegalDialog } from './components/LegalDialog'
 import { FullscreenPlayer } from './components/FullscreenPlayer'
 import { HomeView } from './views/HomeView'
 import { SearchView } from './views/SearchView'
@@ -53,6 +56,28 @@ export function App(): React.JSX.Element {
 
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [addStreamOpen, setAddStreamOpen] = useState(false)
+  const [legalOpen, setLegalOpen] = useState(false)
+
+  useEffect(() => {
+    const sync = (): void => setLegalOpen(window.location.hash === '#datenschutz')
+    sync()
+    window.addEventListener('hashchange', sync)
+    return () => window.removeEventListener('hashchange', sync)
+  }, [])
+
+  const openLegal = (): void => {
+    setLegalOpen(true)
+    if (window.location.hash !== '#datenschutz') {
+      window.history.replaceState(null, '', '#datenschutz')
+    }
+  }
+
+  const closeLegal = (): void => {
+    setLegalOpen(false)
+    if (window.location.hash === '#datenschutz') {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`)
+    }
+  }
 
   useEffect(() => {
     bridge.settings
@@ -108,7 +133,7 @@ export function App(): React.JSX.Element {
     }
     navigator.mediaSession.metadata = new MediaMetadata({
       title: nowPlaying?.title ?? current.name,
-      artist: nowPlaying?.artist ?? (nowPlaying ? current.name : 'SmoothRadio'),
+      artist: nowPlaying?.artist ?? (nowPlaying ? current.name : BRAND.name),
       album: current.name,
       artwork: current.favicon ? [{ src: current.favicon, sizes: '512x512' }] : []
     })
@@ -187,7 +212,7 @@ export function App(): React.JSX.Element {
         usePlayer.getState().setFullscreen(false)
         return
       }
-      if (event.key === 'F11') {
+      if (isDesktop && event.key === 'F11') {
         event.preventDefault()
         void bridge.window.toggleFullscreen()
         return
@@ -263,12 +288,17 @@ export function App(): React.JSX.Element {
   }
 
   return (
-    <div className="relative flex h-screen flex-col overflow-hidden bg-[#06060a] text-white">
+    <div className="relative flex h-[100dvh] flex-col overflow-hidden bg-[#06060a] text-white">
       <AmbientBackground />
       <TitleBar />
+      <MobileNav onOpenSettings={() => setSettingsOpen(true)} />
 
       <div className="relative z-10 flex min-h-0 flex-1">
-        <Sidebar onOpenSettings={() => setSettingsOpen(true)} onOpenAddStream={() => setAddStreamOpen(true)} />
+        <Sidebar
+          onOpenSettings={() => setSettingsOpen(true)}
+          onOpenAddStream={() => setAddStreamOpen(true)}
+          onOpenLegal={openLegal}
+        />
         <main className="scroll-area relative min-w-0 flex-1 overflow-y-auto">
           <Header onOpenSettings={() => setSettingsOpen(true)} />
           <AnimatePresence mode="wait" initial={false}>
@@ -288,8 +318,9 @@ export function App(): React.JSX.Element {
       <PlayerBar onOpenSettings={() => setSettingsOpen(true)} />
       <AnimatePresence>{fullscreen && <FullscreenPlayer key="fullscreen-player" />}</AnimatePresence>
       <Toast />
-      <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} onOpenLegal={openLegal} />
       <AddStreamDialog open={addStreamOpen} onClose={() => setAddStreamOpen(false)} />
+      <LegalDialog open={legalOpen} onClose={closeLegal} />
     </div>
   )
 }

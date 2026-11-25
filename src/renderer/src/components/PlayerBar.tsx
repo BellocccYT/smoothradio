@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { usePlayer } from '../store/player'
 import { cn, formatBitrate } from '../lib/utils'
+import { isDesktop } from '../lib/bridge'
 import { Artwork } from './Artwork'
 import { Marquee } from './Marquee'
 import { Visualizer } from './Visualizer'
@@ -56,13 +57,13 @@ export function PlayerBar({ onOpenSettings }: { onOpenSettings: () => void }): R
   const VolumeIcon = muted || volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2
 
   return (
-    <footer className="relative z-30 px-3 pb-3">
-      <div className="glass hairline relative flex h-[84px] items-center rounded-[26px] border border-white/[0.08] px-3 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.95)]">
-        <div className="flex min-w-0 flex-1 items-center gap-3">
+    <footer className="relative z-30 px-2 pb-2 sm:px-3 sm:pb-3">
+      <div className="glass hairline relative flex h-[78px] items-center rounded-[26px] border border-white/[0.08] px-2 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.95)] sm:h-[84px] sm:px-3">
+        <div className="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
           {current ? (
-            <Artwork station={current} className="size-[56px] shrink-0 rounded-[17px]" initialsClassName="text-[15px]" />
+            <Artwork station={current} className="size-[46px] shrink-0 rounded-[15px] sm:size-[56px] sm:rounded-[17px]" initialsClassName="text-[13px] sm:text-[15px]" />
           ) : (
-            <div className="grid size-[56px] shrink-0 place-items-center rounded-[17px] border border-white/[0.06] bg-white/[0.03]">
+            <div className="grid size-[46px] shrink-0 place-items-center rounded-[15px] border border-white/[0.06] bg-white/[0.03] sm:size-[56px] sm:rounded-[17px]">
               <span className="size-2 rounded-full bg-[var(--accent)]/70 shadow-[0_0_16px_var(--accent)]" />
             </div>
           )}
@@ -71,7 +72,7 @@ export function PlayerBar({ onOpenSettings }: { onOpenSettings: () => void }): R
             <div className="flex items-center gap-2">
               <Marquee
                 text={current?.name ?? 'Noch nichts ausgewählt'}
-                className="max-w-[220px] text-[13px] font-semibold tracking-[-0.01em] text-white/92"
+                className="max-w-[150px] text-[12.5px] font-semibold tracking-[-0.01em] text-white/92 sm:max-w-[220px] sm:text-[13px]"
               />
               {current && (
                 <button
@@ -96,7 +97,7 @@ export function PlayerBar({ onOpenSettings }: { onOpenSettings: () => void }): R
             <Marquee
               text={secondary}
               className={cn(
-                'mt-1 max-w-[300px] text-[11.5px]',
+                'mt-1 max-w-[150px] text-[10.5px] sm:max-w-[300px] sm:text-[11.5px]',
                 error ? 'text-red-300/80' : 'text-white/42'
               )}
             />
@@ -104,7 +105,7 @@ export function PlayerBar({ onOpenSettings }: { onOpenSettings: () => void }): R
 
         </div>
 
-        <div className="flex shrink-0 flex-col items-center gap-1.5 px-3">
+        <div className="flex shrink-0 flex-col items-center gap-1 px-1.5 sm:gap-1.5 sm:px-3">
           <div className="flex items-center gap-1.5">
             <button
               type="button"
@@ -145,7 +146,7 @@ export function PlayerBar({ onOpenSettings }: { onOpenSettings: () => void }): R
           </span>
         </div>
 
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-2.5">
+        <div className="hidden min-w-0 flex-1 items-center justify-end gap-2.5 sm:flex">
           <Visualizer playing={isPlaying} bars={22} className="hidden w-20 lg:block" height={26} />
 
           <SleepControl />
@@ -160,22 +161,24 @@ export function PlayerBar({ onOpenSettings }: { onOpenSettings: () => void }): R
             <Maximize2 size={14} />
           </button>
 
-          <button
-            type="button"
-            aria-label="Discord Rich Presence"
-            title={
-              discord.state === 'ready'
-                ? `Rich Presence aktiv${discord.username ? ` als ${discord.username}` : ''}`
-                : discord.message ?? 'Discord Rich Presence'
-            }
-            onClick={onOpenSettings}
-            className={cn(
-              'grid size-8 place-items-center rounded-full transition-colors hover:bg-white/[0.05]',
-              discord.state === 'ready' ? 'text-[#a5b4fc]' : 'text-white/25 hover:text-white/60'
-            )}
-          >
-            <DiscordIcon className="size-[15px]" />
-          </button>
+          {isDesktop && (
+            <button
+              type="button"
+              aria-label="Discord Rich Presence"
+              title={
+                discord.state === 'ready'
+                  ? `Rich Presence aktiv${discord.username ? ` als ${discord.username}` : ''}`
+                  : discord.message ?? 'Discord Rich Presence'
+              }
+              onClick={onOpenSettings}
+              className={cn(
+                'grid size-8 place-items-center rounded-full transition-colors hover:bg-white/[0.05]',
+                discord.state === 'ready' ? 'text-[#a5b4fc]' : 'text-white/25 hover:text-white/60'
+              )}
+            >
+              <DiscordIcon className="size-[15px]" />
+            </button>
+          )}
 
           <div className="flex items-center gap-2">
             <button

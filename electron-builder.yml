@@ -1,6 +1,6 @@
-appId: com.smoothradio.app
-productName: SmoothRadio
-copyright: Copyright © 2026 SmoothRadio
+appId: com.funkkunst.app
+productName: Funkkunst
+copyright: Copyright © 2026 Funkkunst
 directories:
   buildResources: build
   output: dist
@@ -30,7 +30,7 @@ nsis:
   allowElevation: false
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  shortcutName: SmoothRadio
+  shortcutName: Funkkunst
   runAfterFinish: true
   installerIcon: build/icon.ico
   uninstallerIcon: build/icon.ico

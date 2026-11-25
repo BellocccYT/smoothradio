@@ -1,7 +1,8 @@
 import { motion } from 'motion/react'
 import { ArrowUpRight, Heart, Loader2, Pause, Play, Radio } from 'lucide-react'
 import { usePlayer } from '../store/player'
-import { bridge } from '../lib/bridge'
+import { bridge, isDesktop } from '../lib/bridge'
+import { BRAND } from '@shared/brand'
 import { curatedStations, featuredStation } from '../lib/stations'
 import { cn, formatBitrate, stationColors } from '../lib/utils'
 import { LogoMark } from './Logo'
@@ -23,7 +24,7 @@ export function Hero(): React.JSX.Element {
   const isFavorite = favorites.some((item) => item.id === station.id)
   const isCurrent = Boolean(current) && current?.id === station.id
 
-  const title = current ? current.name : 'Radio, aber smooth.'
+  const title = current ? current.name : BRAND.tagline
   const eyebrow = current ? (isPlaying ? 'Jetzt live' : 'Bereit zum Weiterhören') : 'Dein neuer Lieblingssender'
   const nowLine = nowPlaying
     ? nowPlaying.artist
@@ -31,7 +32,7 @@ export function Hero(): React.JSX.Element {
       : nowPlaying.raw
     : current
       ? current.description ?? 'Live-Stream'
-      : 'Handverlesene Sender, ein lebendiges Spektrum und Discord Rich Presence. Ein Klick, und die Welt klingt besser.'
+      : 'Handverlesene Sender, über 50.000 Streams. Ohne Konto, ohne Werbung, ohne Tracking.'
 
   const handlePrimary = (): void => {
     if (current) void togglePlay()
@@ -53,7 +54,7 @@ export function Hero(): React.JSX.Element {
         <LogoMark size={420} />
       </div>
 
-      <div className="relative grid gap-6 px-8 py-8 md:grid-cols-[minmax(0,1fr)_300px] md:items-center md:py-9 xl:px-10">
+      <div className="relative grid gap-6 px-5 py-6 sm:px-8 sm:py-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-center lg:py-9 xl:px-10">
         <div className="max-w-[620px]">
           <div className="flex items-center gap-2.5">
             <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/60 backdrop-blur">
@@ -111,7 +112,7 @@ export function Hero(): React.JSX.Element {
               </>
             ) : (
               <>
-                {['24/7 live', 'Kein Account nötig', 'Discord RPC'].map((chip) => (
+                {['24/7 live', 'Kein Account nötig', isDesktop ? 'Discord RPC' : 'Werbefrei'].map((chip) => (
                   <span
                     key={chip}
                     className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45"
@@ -179,7 +180,7 @@ export function Hero(): React.JSX.Element {
           </div>
         </div>
 
-        <div className="hidden justify-center md:flex">
+        <div className="hidden justify-center lg:flex">
           <LiveOrb station={station} playing={isPlaying && isCurrent} className="size-[290px]" />
         </div>
       </div>

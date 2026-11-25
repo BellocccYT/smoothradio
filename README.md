@@ -1,37 +1,56 @@
-# SmoothRadio
+# Funkkunst
 
-Ein moderner Desktop-Radio-Client für Windows — handverlesene Sender, Live-Metadaten, animiertes Spektrum und **Discord Rich Presence**. Gebaut mit Electron, React, TypeScript und Tailwind.
+Ein Webradio für Desktop und Browser — handverlesene Sender, Live-Metadaten, animiertes Spektrum und **Discord Rich Presence** in der Desktop-App. Gebaut mit Electron, React, TypeScript und Tailwind.
 
-![SmoothRadio](docs/screenshot.png)
+![Funkkunst](docs/screenshot.png)
+
+> **Hinweis:** Funkkunst ist ein privates, nicht-kommerzielles Projekt. Es gibt keine Werbung, keine Spendenaufrufe, keine Konten und kein Tracking.
 
 ## Download
 
-[**Windows-Installer & Portable herunterladen**](https://github.com/BellocccYT/smoothradio/releases/latest) · [Zum Quellcode](https://github.com/BellocccYT/smoothradio)
+[**Windows-Installer & Portable herunterladen**](https://github.com/BellocccYT/smoothradio/releases/latest) · [Zum Quellcode](https://github.com/BellocccYT/smoothradio) · [**Website: funkkunst.de**](https://funkkunst.de)
 
 ## Features
 
 - **Entdecken** — kuratierte Sender (SomaFM, Radio Paradise, FIP, KEXP, 1LIVE, DLF, Nightride …) plus ~50.000 Sender über die Radio-Browser-API
 - **Suche & Genres** — nach Name, Stadt oder Stimmung; acht Genre-Welten
-- **Live-Metadaten** — aktuelle Songs via ICY-StreamTitle, automatisch aktualisiert; HLS-Sender wie WDR 2 nutzen automatisch einen MP3-Spiegel
-- **Discord Rich Presence** — Sender, Song und Live-Status im Discord-Profil, inkl. Sender-Button
+- **Live-Metadaten** — aktuelle Songs via ICY-StreamTitle, automatisch aktualisiert; HLS-Sender wie WDR 2 nutzen automatisch einen MP3-Spiegel *(nur Desktop)*
+- **Discord Rich Presence** — Sender, Song und Live-Status im Discord-Profil, inkl. Sender-Button *(nur Desktop)*
 - **Favoriten, Verlauf, eigene Streams** — lokal gespeichert, kein Konto nötig
 - **Fullscreen-Player** — ein immersiver Now-Playing-Modus mit riesigem Vinyl-Artwork, Live-Spektrum, Queue und Discord-Status (`F`)
-- **Sleep-Timer, Media-Tasten, Tray** — Radio läuft weiter, wenn das Fenster zu ist
+- **Sleep-Timer, Media-Tasten, Tray** — Radio läuft weiter, wenn das Fenster zu ist *(Tray nur Desktop)*
 - **Eigenes Design** — Vektor-Logo, Glass-UI, Aurora-Hintergrund, sechs Akzentfarben, animiertes Canvas-Spektrum
 
 ![Fullscreen Player](docs/fullscreen.png)
 
-## Werbevideo
+## Website (Browser-Version)
 
-[![SmoothRadio Promo](docs/promo.gif)](docs/SmoothRadio-Promo.mp4)
+Funkkunst lässt sich als statische Website auf einer `.de`-Domain betreiben. Der Web-Build nutzt denselben React-Renderer, spielt Streams aber direkt im Browser ab — ohne Proxy, ohne Server-Logik, ohne Werbung.
 
-[Den 22-Sekunden-Film in 1080p ansehen](docs/SmoothRadio-Promo.mp4) — gebaut mit HyperFrames aus echten App-Aufnahmen.
+```bash
+npm install
+npm run build:web     # erzeugt dist-web/
+npm run preview:web   # lokal auf http://localhost:4173
+```
+
+Das Ergebnis in `dist-web/` ist reines Static Hosting: HTML, JS, CSS, Fonts, `robots.txt`, `sitemap.xml`. Details zu Deployment und Recht findest du in **[docs/web-deployment.md](docs/web-deployment.md)**.
+
+### Unterschiede zur Desktop-App
+
+| | Desktop | Website |
+|---|---|---|
+| Discord Rich Presence | ✅ | — (kein IPC im Browser) |
+| Echte Songtitel (ICY) | ✅ | — (Browser kann keine ICY-Header lesen) |
+| http-Streams | ✅ | — (Mixed Content wird blockiert) |
+| Tray, Autostart, Media-Tasten | ✅ | — |
+| Favoriten, Verlauf, eigene Sender | ✅ | ✅ (localStorage) |
 
 ## Schnellstart (Entwicklung)
 
 ```bash
 npm install
-npm run dev
+npm run dev        # Electron-App
+npm run dev:web    # Website im Browser
 ```
 
 > Falls Electron unter Windows nicht startet, weil `npm` Install-Scripts blockiert:
@@ -45,8 +64,8 @@ npm run dist
 
 Ergebnis in `dist/`:
 
-- `SmoothRadio-1.0.1-x64.exe` — One-Click-Installer, per Benutzer (keine Adminrechte, Desktop-Shortcut)
-- `SmoothRadio-1.0.1-Portable.exe` — portable Version ohne Installation
+- `Funkkunst-1.0.1-x64.exe` — One-Click-Installer, per Benutzer (keine Adminrechte, Desktop-Shortcut)
+- `Funkkunst-1.0.1-Portable.exe` — portable Version ohne Installation
 
 Die EXE ist **nicht code-signiert**. Windows SmartScreen zeigt beim ersten Start ggf. „Unbekannter Herausgeber" → *Weitere Informationen* → *Trotzdem ausführen*.
 
@@ -54,10 +73,10 @@ Die EXE ist **nicht code-signiert**. Windows SmartScreen zeigt beim ersten Start
 
 1. [Discord Developer Portal](https://discord.com/developers/applications) öffnen → **New Application**
 2. Unter **General Information** die **Application ID** kopieren
-3. In SmoothRadio → **Einstellungen** → **Discord Rich Presence** aktivieren, ID einfügen, **Speichern**
+3. In Funkkunst → **Einstellungen** → **Discord Rich Presence** aktivieren, ID einfügen, **Speichern**
 4. Optional: Unter **Rich Presence → Art Assets** die Datei `resources/discord-logo.png` als Asset namens `logo` hochladen — dann erscheint das App-Logo im Discord-Profil
 
-Discord Desktop muss auf demselben PC laufen. Bei geschlossenem Discord versucht SmoothRadio automatisch alle 20 Sekunden erneut zu verbinden.
+Discord Desktop muss auf demselben PC laufen. Bei geschlossenem Discord versucht Funkkunst automatisch alle 20 Sekunden erneut zu verbinden.
 
 ![Einstellungen](docs/settings.png)
 
@@ -68,7 +87,7 @@ Discord Desktop muss auf demselben PC laufen. Bei geschlossenem Discord versucht
 | `Space` | Play / Pause |
 | `F` | Fullscreen-Player öffnen / schließen |
 | `Esc` | Fullscreen-Player schließen |
-| `F11` | Echtes Vollbild umschalten |
+| `F11` | Echtes Vollbild umschalten *(nur Desktop)* |
 | `Ctrl + K` oder `/` | Suche fokussieren |
 | `M` | Stummschalten |
 | `F12` | DevTools |
@@ -82,9 +101,10 @@ src/
   main/        Electron-Main: Fenster, Tray, Settings, Discord RPC, ICY-Metadaten
   preload/     typsichere IPC-Bridge (contextBridge)
   renderer/    React-App (Views, Komponenten, Store, Audio-Engine)
-  shared/      gemeinsame TypeScript-Typen
+  shared/      gemeinsame TypeScript-Typen und Marken-Definition
 resources/     Logo, Tray-Icon, Discord-Asset
 scripts/       Icon-Pipeline, Preview-Server, Smoke-Test
+vite.web.config.mts  Static-Website-Build (dist-web/)
 ```
 
 ## Technik
@@ -97,4 +117,4 @@ scripts/       Icon-Pipeline, Preview-Server, Smoke-Test
 
 ## Credits
 
-Streams und Metadaten gehören den jeweiligen Sendern. SmoothRadio speichert ausschließlich lokal (Favoriten, Verlauf, Einstellungen) und sendet keine Nutzungsdaten.
+Streams und Metadaten gehören den jeweiligen Sendern. Funkkunst speichert ausschließlich lokal (Favoriten, Verlauf, Einstellungen) und sendet keine Nutzungsdaten. Die Website setzt keine Cookies und kein Tracking ein.

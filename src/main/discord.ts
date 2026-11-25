@@ -165,7 +165,7 @@ export class DiscordService {
     const activity: SetActivity = {
       type: 2,
       details: cut(presence.playing && nowPlaying ? nowPlaying : presence.playing ? station : `Pausiert · ${station}`),
-      state: cut(presence.playing ? `auf ${station}` : 'SmoothRadio'),
+      state: cut(presence.playing ? `auf ${station}` : 'Funkkunst'),
       instance: false,
       largeImageKey: this.settings.discordLargeImageKey.trim() || 'logo',
       largeImageText: cut(nowPlaying ? `${nowPlaying} · ${station}` : station)

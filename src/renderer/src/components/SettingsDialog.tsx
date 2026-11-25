@@ -1,14 +1,23 @@
 import { useEffect, useState } from 'react'
 import { ChevronRight, ExternalLink, RefreshCw, X } from 'lucide-react'
 import { usePlayer } from '../store/player'
-import { bridge } from '../lib/bridge'
+import { bridge, isDesktop } from '../lib/bridge'
 import { accents } from '../lib/accents'
 import { cn } from '../lib/utils'
+import { BRAND } from '@shared/brand'
 import { Modal, SettingsRow, Toggle } from './Modal'
 import { DiscordIcon } from './DiscordIcon'
 import { Logo } from './Logo'
 
-export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () => void }): React.JSX.Element {
+export function SettingsDialog({
+  open,
+  onClose,
+  onOpenLegal
+}: {
+  open: boolean
+  onClose: () => void
+  onOpenLegal: () => void
+}): React.JSX.Element {
   const settings = usePlayer((state) => state.settings)
   const discord = usePlayer((state) => state.discord)
   const accent = usePlayer((state) => state.accent)
@@ -58,7 +67,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
     <Modal open={open} onClose={onClose} className="flex max-h-[84vh] flex-col">
       <div className="flex shrink-0 items-center justify-between border-b border-white/[0.06] px-6 py-5">
         <div>
-          <p className="text-[9.5px] font-semibold uppercase tracking-[0.24em] text-white/25">SmoothRadio</p>
+          <p className="text-[9.5px] font-semibold uppercase tracking-[0.24em] text-white/25">{BRAND.name}</p>
           <h2 className="font-display mt-1 text-[21px] font-semibold tracking-[-0.025em] text-white">Einstellungen</h2>
         </div>
         <button
@@ -74,6 +83,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
       <div className="scroll-area min-h-0 flex-1 overflow-y-auto px-6 pb-7">
         {settings && (
           <>
+            {isDesktop && (
             <section className="pt-5">
               <div className="flex items-center gap-2">
                 <DiscordIcon className="size-4 text-[#8b9cf7]" />
@@ -222,6 +232,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                 </div>
               </div>
             </section>
+            )}
 
             <section className="mt-6 border-t border-white/[0.06] pt-5">
               <h3 className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white/45">Darstellung</h3>
@@ -249,6 +260,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
               </div>
             </section>
 
+            {isDesktop && (
             <section className="mt-6 border-t border-white/[0.06] pt-5">
               <h3 className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white/45">Verhalten</h3>
               <div className="mt-1 divide-y divide-white/[0.05]">
@@ -264,7 +276,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                 </SettingsRow>
                 <SettingsRow
                   title="Beim Anmelden starten"
-                  description="SmoothRadio startet automatisch mit Windows (im Tray)."
+                  description="Funkkunst startet automatisch mit Windows (im Tray)."
                 >
                   <Toggle
                     label="Autostart"
@@ -284,6 +296,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                 </SettingsRow>
               </div>
             </section>
+            )}
 
             <section className="mt-6 border-t border-white/[0.06] pt-5">
               <h3 className="text-[12px] font-semibold uppercase tracking-[0.14em] text-white/45">Tastenkürzel</h3>
@@ -292,7 +305,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   ['Space', 'Play / Pause'],
                   ['F', 'Fullscreen-Player'],
                   ['Esc', 'Player schließen'],
-                  ['F11', 'Vollbild umschalten'],
+                  ...(isDesktop ? [['F11', 'Vollbild umschalten'] as const] : []),
                   ['Ctrl K', 'Suche fokussieren'],
                   ['M', 'Stummschalten']
                 ].map(([key, label]) => (
@@ -311,10 +324,10 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                 <Logo size={48} />
                 <div>
                   <p className="font-display text-[15px] font-semibold tracking-[-0.02em] text-white">
-                    SmoothRadio <span className="text-white/30">v{version.split(' ')[0]}</span>
+                    {BRAND.name} <span className="text-white/30">v{version.split(' ')[0]}</span>
                   </p>
                   <p className="mt-0.5 text-[11px] text-white/30">
-                    Ein smoother Desktop-Radio-Client. Lokal, werbefrei, ohne Konto.
+                    Handverlesenes Webradio. Lokal gespeichert, werbefrei, ohne Konto.
                   </p>
                 </div>
               </div>
@@ -323,7 +336,7 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                   { label: 'SomaFM', url: 'https://somafm.com/' },
                   { label: 'Radio Paradise', url: 'https://radioparadise.com/' },
                   { label: 'Radio-Browser', url: 'https://www.radio-browser.info/' },
-                  { label: 'Discord Portal', url: 'https://discord.com/developers/applications' }
+                  ...(isDesktop ? [{ label: 'Discord Portal', url: 'https://discord.com/developers/applications' }] : [])
                 ].map((link) => (
                   <button
                     key={link.label}
@@ -335,10 +348,17 @@ export function SettingsDialog({ open, onClose }: { open: boolean; onClose: () =
                     <ExternalLink size={9} />
                   </button>
                 ))}
+                <button
+                  type="button"
+                  onClick={onOpenLegal}
+                  className="flex items-center gap-1.5 rounded-full border border-white/[0.07] px-2.5 py-1 text-[10.5px] text-white/35 transition-colors hover:border-white/15 hover:text-white/70"
+                >
+                  Datenschutz
+                </button>
               </div>
               <p className="mt-4 text-[10px] leading-relaxed text-white/20">
-                Streams gehören ihren jeweiligen Sendern. SmoothRadio speichert nur Favoriten und Einstellungen lokal
-                auf diesem Gerät.
+                Streams gehören ihren jeweiligen Sendern. {BRAND.name} speichert nur Favoriten und Einstellungen lokal
+                auf diesem Gerät – keine Konten, kein Tracking.
               </p>
             </section>
           </>

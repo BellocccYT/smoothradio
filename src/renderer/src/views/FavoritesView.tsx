@@ -12,7 +12,7 @@ export function FavoritesView({ onOpenAddStream }: { onOpenAddStream: () => void
   const removeCustomStation = usePlayer((state) => state.removeCustomStation)
 
   return (
-    <div className="px-7 pb-8">
+    <div className="px-4 pb-8 sm:px-7">
       <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] px-5 py-4">
         <div>
           <p className="text-[12.5px] font-medium text-white/75">

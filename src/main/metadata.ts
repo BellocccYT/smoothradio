@@ -3,7 +3,7 @@ import https from 'node:https'
 import { EventEmitter } from 'node:events'
 import type { TrackMetadata } from '@shared/types'
 
-const USER_AGENT = 'SmoothRadio/1.0 (Windows; desktop radio client)'
+const USER_AGENT = 'Funkkunst/1.0 (Windows; desktop radio client)'
 const MAX_BYTES = 160_000
 const POLL_INTERVAL = 20_000
 

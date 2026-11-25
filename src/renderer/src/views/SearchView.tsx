@@ -46,8 +46,8 @@ export function SearchView(): React.JSX.Element {
 
   if (!query.trim()) {
     return (
-      <div className="px-7 pb-8">
-        <div className="rounded-[26px] border border-white/[0.06] bg-white/[0.015] px-7 py-6">
+      <div className="px-4 pb-8 sm:px-7">
+        <div className="rounded-[26px] border border-white/[0.06] bg-white/[0.015] px-5 py-5 sm:px-7 sm:py-6">
           <p className="font-display text-[20px] font-semibold tracking-[-0.025em] text-white/90">
             Was möchtest du hören?
           </p>
@@ -80,7 +80,7 @@ export function SearchView(): React.JSX.Element {
   }
 
   return (
-    <div className="px-7 pb-8">
+    <div className="px-4 pb-8 sm:px-7">
       <div className="flex items-baseline justify-between">
         <p className="text-[12px] text-white/35">
           {typing || results.loading

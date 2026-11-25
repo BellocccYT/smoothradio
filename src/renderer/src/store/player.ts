@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware'
 import type { AppSettings, DiscordStatus, TrackMetadata } from '@shared/types'
 import { audioEngine } from '../lib/audio'
 import { curatedStations, featuredStation } from '../lib/stations'
+import { isPlayableUrl } from '../lib/utils'
 import type { Station, Toast, ToastTone, View } from '../lib/types'
 import { bridge } from '../lib/bridge'
 
@@ -79,6 +80,13 @@ export const usePlayer = create<PlayerState>()(
       sessionStartedAt: null,
 
       playStation: async (station, queue) => {
+        if (!isPlayableUrl(station.url)) {
+          get().pushToast(
+            'Dieser Sender läuft nur über http und wird von Browsern auf https-Seiten blockiert. Bitte einen https-Stream wählen.',
+            'error'
+          )
+          return
+        }
         set((state) => {
           const baseQueue = queue?.length ? queue : state.queue.length ? state.queue : [station]
           const nextQueue = baseQueue.some((item) => item.id === station.id) ? baseQueue : [station, ...baseQueue]
@@ -229,6 +237,7 @@ export const usePlayer = create<PlayerState>()(
       }
     }),
     {
+      // Bewusst der alte Key, damit Favoriten und Verlauf beim Umstieg erhalten bleiben.
       name: 'smoothradio:v1',
       version: 1,
       partialize: (state) => ({

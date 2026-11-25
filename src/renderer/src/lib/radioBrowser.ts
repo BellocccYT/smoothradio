@@ -1,4 +1,5 @@
-import { isHlsUrl, isPlaylistUrl } from './utils'
+import { isHlsUrl, isPlayableUrl, isPlaylistUrl } from './utils'
+import { isWebApp } from './env'
 import type { Station } from './types'
 
 const HOSTS = [
@@ -31,18 +32,22 @@ const MIRROR_TTL = 10 * 60 * 1000
 
 function mapStation(raw: RawStation): Station | null {
   const url = (raw.url_resolved || raw.url || '').trim()
-  if (!url || !/^https?:\/\//i.test(url)) return null
+  if (!url || !isPlayableUrl(url)) return null
   if (isPlaylistUrl(url)) return null
   if (raw.lastcheckok === 0) return null
   const name = (raw.name || '').replace(/\s+/g, ' ').trim()
   if (!name) return null
+
+  const favicon = raw.favicon?.trim()
+  const safeFavicon =
+    favicon && (!isWebApp || /^https:\/\//i.test(favicon) || favicon.startsWith('//')) ? favicon : undefined
 
   return {
     id: raw.stationuuid,
     name,
     url,
     homepage: raw.homepage?.trim() || undefined,
-    favicon: raw.favicon?.trim() || undefined,
+    favicon: safeFavicon,
     tags: (raw.tags || '')
       .split(',')
       .map((tag) => tag.trim())

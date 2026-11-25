@@ -1,12 +1,14 @@
 import { Headphones, Music4, Radio, Sparkles, Waves } from 'lucide-react'
 import { usePlayer } from '../store/player'
-import { curatedStations, genres } from '../lib/stations'
+import { BRAND } from '@shared/brand'
+import { curatedStations, genres, pinnedStations } from '../lib/stations'
 import { fetchTrending } from '../lib/radioBrowser'
 import { useAsync } from '../lib/useAsync'
 import { Hero } from '../components/Hero'
 import { StationCard } from '../components/StationCard'
 import { SectionHeader, SkeletonGrid, ErrorState } from '../components/Section'
 import { CompactRow } from '../components/CompactRow'
+import { QuickLinks } from '../components/QuickLinks'
 import type { Genre } from '../lib/types'
 
 const moodIcons = [Waves, Music4, Sparkles, Headphones]
@@ -37,11 +39,33 @@ export function HomeView(): React.JSX.Element {
   const recents = usePlayer((state) => state.recents)
   const setView = usePlayer((state) => state.setView)
   const trending = useAsync(() => fetchTrending(12), [])
-  const curated = curatedStations.slice(0, 10)
+  const curated = curatedStations
+    .filter((station) => !pinnedStations.some((pinned) => pinned.id === station.id))
+    .slice(0, 10)
 
   return (
-    <div className="px-7 pb-8">
+    <div className="px-4 pb-8 sm:px-7">
       <Hero />
+
+      <section className="mt-8">
+        <SectionHeader
+          title="Deine Sender"
+          subtitle="Harmony FM, DASDING, WDR 2 und 1LIVE – direkt reinhören."
+        />
+        <div className="grid gap-1.5 sm:grid-cols-2 xl:grid-cols-4">
+          {pinnedStations.map((station) => (
+            <CompactRow key={station.id} station={station} queue={pinnedStations} />
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-9">
+        <SectionHeader
+          title="QuickLinks"
+          subtitle="Wetter, Nachrichten und private Suche – ohne Tracking."
+        />
+        <QuickLinks />
+      </section>
 
       {recents.length > 0 && (
         <section className="mt-9">
@@ -106,7 +130,7 @@ export function HomeView(): React.JSX.Element {
       <footer className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.05] pt-5 text-[10.5px] text-white/22">
         <span className="flex items-center gap-1.5">
           <Radio size={12} />
-          SmoothRadio · Made for smooth listening
+          {BRAND.name} · {BRAND.tagline}
         </span>
         <span>Streams & Metadaten: SomaFM · Radio Paradise · Radio-Browser</span>
       </footer>

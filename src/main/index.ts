@@ -17,7 +17,7 @@ import { DiscordService } from './discord'
 import { metadataService } from './metadata'
 import type { AppSettings, DiscordStatus, PlayerCommand, PresencePayload } from '@shared/types'
 
-const APP_ID = 'com.smoothradio.app'
+const APP_ID = 'com.funkkunst.app'
 const isDev = !app.isPackaged
 const startHidden = process.argv.includes('--hidden')
 
@@ -150,10 +150,10 @@ function applyLoginItem(settings: AppSettings): void {
 function createTray(): void {
   const image = nativeImage.createFromPath(trayIconPath())
   tray = new Tray(image.isEmpty() ? nativeImage.createEmpty() : image)
-  tray.setToolTip('SmoothRadio')
+  tray.setToolTip('Funkkunst')
   tray.setContextMenu(
     Menu.buildFromTemplate([
-      { label: 'SmoothRadio', enabled: false },
+      { label: 'Funkkunst', enabled: false },
       { type: 'separator' },
       { label: 'Wiedergabe / Pause', click: () => sendPlayerCommand('toggle') },
       { label: 'Nächster Sender', click: () => sendPlayerCommand('next') },
@@ -202,7 +202,7 @@ function createWindow(): void {
     show: false,
     frame: false,
     backgroundColor: '#06060a',
-    title: 'SmoothRadio',
+    title: 'Funkkunst',
     icon: nativeImage.createFromPath(iconPath()),
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
@@ -273,7 +273,7 @@ function createWindow(): void {
 function configureSession(): void {
   const ses = session.defaultSession
   ses.setUserAgent(
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 SmoothRadio/1.0'
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Funkkunst/1.0'
   )
   ses.setPermissionRequestHandler((_webContents, _permission, callback) => callback(false))
 }
@@ -350,9 +350,9 @@ function registerIpc(): void {
   ipcMain.handle('tray:update', (_event, state: { stationName?: string; playing: boolean } | null) => {
     if (!tray) return
     if (state?.stationName) {
-      tray.setToolTip(`SmoothRadio — ${state.stationName}${state.playing ? ' · spielt' : ' · pausiert'}`)
+      tray.setToolTip(`Funkkunst — ${state.stationName}${state.playing ? ' · spielt' : ' · pausiert'}`)
     } else {
-      tray.setToolTip('SmoothRadio')
+      tray.setToolTip('Funkkunst')
     }
   })
 

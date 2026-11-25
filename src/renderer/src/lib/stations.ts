@@ -218,6 +218,41 @@ export const curatedStations: Station[] = [
     description: 'Das junge WDR-Programm: Pop, Comedy und neue Musik.'
   },
   {
+    id: 'curated-wdr2',
+    name: 'WDR 2',
+    url: 'https://wdr-wdr2-ostwestfalenlippe.icecastssl.wdr.de/wdr/wdr2/ostwestfalenlippe/mp3/128/stream.mp3',
+    homepage: 'https://www1.wdr.de/radio/wdr2/',
+    tags: ['Pop', 'Rock', 'NRW'],
+    country: 'Deutschland',
+    codec: 'MP3',
+    bitrate: 128,
+    curated: true,
+    description: 'Der WDR-Mix aus Pop, Rock und Information – Region Ostwestfalen-Lippe.'
+  },
+  {
+    id: 'curated-dasding',
+    name: 'DASDING',
+    url: 'https://liveradio.swr.de/sw282p3/dasding/',
+    homepage: 'https://www.dasding.de/',
+    tags: ['Pop', 'Indie', 'Junge Kultur'],
+    country: 'Deutschland',
+    codec: 'MP3',
+    bitrate: 128,
+    curated: true,
+    description: 'Das junge SWR-Programm: Pop, Indie und neue Talente.'
+  },
+  {
+    id: 'curated-harmonyfm',
+    name: 'Harmony FM',
+    url: 'https://mp3.harmonyfm.de/harmonyfm/hqlivestream.aac',
+    homepage: 'https://www.harmonyfm.de/',
+    tags: ['Pop', 'Rock', 'Hessen'],
+    country: 'Deutschland',
+    codec: 'AAC',
+    curated: true,
+    description: 'Aktuelle Pop- und Rock-Hits aus Hessen – direkt aus Bad Vilbel.'
+  },
+  {
     id: 'curated-deutschlandfunk',
     name: 'Deutschlandfunk',
     url: 'https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3',
@@ -290,6 +325,17 @@ export const curatedStations: Station[] = [
     description: 'Electronic, Dance und Clubsound aus Mannheim.'
   }
 ]
+
+/**
+ * Schnellzugriff auf der Startseite. Bewusst nur IDs: die Sender bleiben
+ * Teil von `curatedStations` und sind damit auch über Suche und Favoriten
+ * erreichbar.
+ */
+const pinnedIds = ['curated-harmonyfm', 'curated-dasding', 'curated-wdr2', 'curated-einslive'] as const
+
+export const pinnedStations: Station[] = pinnedIds
+  .map((id) => curatedStations.find((station) => station.id === id))
+  .filter((station): station is Station => Boolean(station))
 
 export const genres: Genre[] = [
   { id: 'chill', label: 'Chill', tag: 'chillout', blurb: 'Downtempo, Ambient, Lounge', from: '#5EEAD4', to: '#38BDF8' },

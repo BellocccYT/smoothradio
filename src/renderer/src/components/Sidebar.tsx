@@ -4,7 +4,7 @@ import { Compass, Heart, History, Plus, Search, Settings2 } from 'lucide-react'
 import { usePlayer } from '../store/player'
 import { genres } from '../lib/stations'
 import { cn } from '../lib/utils'
-import { bridge } from '../lib/bridge'
+import { bridge, isDesktop } from '../lib/bridge'
 import { Logo } from './Logo'
 
 const navItems = [
@@ -20,10 +20,12 @@ export function focusSearch(): void {
 
 export function Sidebar({
   onOpenSettings,
-  onOpenAddStream
+  onOpenAddStream,
+  onOpenLegal
 }: {
   onOpenSettings: () => void
   onOpenAddStream: () => void
+  onOpenLegal: () => void
 }): React.JSX.Element {
   const view = usePlayer((state) => state.view)
   const genre = usePlayer((state) => state.genre)
@@ -36,7 +38,7 @@ export function Sidebar({
   }, [])
 
   return (
-    <aside className="relative z-10 flex w-[238px] shrink-0 flex-col border-r border-white/[0.05] bg-black/20 px-3.5 pb-3 pt-5">
+    <aside className="relative z-10 hidden w-[238px] shrink-0 flex-col border-r border-white/[0.05] bg-black/20 px-3.5 pb-3 pt-5 lg:flex">
       <button
         type="button"
         onClick={() => setView('home')}
@@ -45,9 +47,11 @@ export function Sidebar({
         <Logo size={40} />
         <div className="min-w-0">
           <p className="font-display text-[15.5px] font-semibold leading-tight tracking-[-0.02em] text-white">
-            Smooth<span className="text-white/45">Radio</span>
+            Funk<span className="text-white/45">kunst</span>
           </p>
-          <p className="mt-0.5 text-[9px] uppercase tracking-[0.22em] text-white/28">Desktop Radio</p>
+          <p className="mt-0.5 text-[9px] uppercase tracking-[0.22em] text-white/28">
+            {isDesktop ? 'Desktop Radio' : 'Webradio'}
+          </p>
         </div>
       </button>
 
@@ -130,16 +134,25 @@ export function Sidebar({
         Eigenen Stream hinzufügen
       </button>
 
-      <div className="mt-auto flex items-center gap-1.5 pt-5">
+      <div className="mt-auto space-y-2 pt-5">
         <button
           type="button"
           onClick={onOpenSettings}
-          className="flex flex-1 items-center gap-2.5 rounded-xl px-2.5 py-2 text-[12.5px] text-white/45 transition-colors hover:bg-white/[0.04] hover:text-white/85"
+          className="flex w-full items-center gap-2.5 rounded-xl px-2.5 py-2 text-[12.5px] text-white/45 transition-colors hover:bg-white/[0.04] hover:text-white/85"
         >
           <Settings2 size={15} />
           Einstellungen
         </button>
-        <span className="pr-1 text-[10px] tabular-nums text-white/20">{version ? `v${version.split(' ')[0]}` : ''}</span>
+        <div className="flex items-center justify-between px-1">
+          <button
+            type="button"
+            onClick={onOpenLegal}
+            className="text-[10px] text-white/25 underline decoration-white/15 underline-offset-2 transition-colors hover:text-white/60"
+          >
+            Datenschutz
+          </button>
+          <span className="text-[10px] tabular-nums text-white/20">{version ? `v${version.split(' ')[0]}` : ''}</span>
+        </div>
       </div>
     </aside>
   )

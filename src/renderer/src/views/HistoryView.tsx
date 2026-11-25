@@ -10,7 +10,7 @@ export function HistoryView(): React.JSX.Element {
   const setView = usePlayer((state) => state.setView)
 
   return (
-    <div className="px-7 pb-8">
+    <div className="px-4 pb-8 sm:px-7">
       <div className="mb-5 flex items-center justify-between">
         <p className="text-[12px] text-white/35">
           {recents.length > 0 ? `Die letzten ${recents.length} Sender` : 'Noch nichts gehört'}

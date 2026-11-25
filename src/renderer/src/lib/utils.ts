@@ -1,4 +1,5 @@
 import { clsx, type ClassValue } from 'clsx'
+import { isWebApp } from './env'
 
 export function cn(...inputs: ClassValue[]): string {
   return clsx(inputs)
@@ -42,6 +43,15 @@ export function isHlsUrl(url: string): boolean {
 
 export function isPlaylistUrl(url: string): boolean {
   return /\.(pls|m3u|xspf|asx)(\?|$)/i.test(url)
+}
+
+/**
+ * Auf einer https-Website blockieren Browser alle http-Medien (Mixed Content).
+ * Im Web-Build sind deshalb nur https-Streams abspielbar.
+ */
+export function isPlayableUrl(url: string): boolean {
+  if (!/^https?:\/\//i.test(url)) return false
+  return isWebApp ? /^https:\/\//i.test(url) : true
 }
 
 export function formatBitrate(bitrate?: number, codec?: string, hls?: boolean): string {

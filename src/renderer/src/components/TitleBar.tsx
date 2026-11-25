@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Copy, Minus, Square, X } from 'lucide-react'
 import { bridge, isDesktop } from '../lib/bridge'
 import { cn } from '../lib/utils'
+import { BRAND } from '@shared/brand'
 
 function WindowButton({
   label,
@@ -50,9 +51,11 @@ export function TitleBar(): React.JSX.Element {
           <span className="relative inline-flex size-1.5 rounded-full bg-emerald-400" />
         </span>
         <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-white/32">
-          SmoothRadio
+          {BRAND.name}
         </span>
-        <span className="hidden text-[10px] tracking-[0.16em] text-white/18 sm:inline">Desktop Radio</span>
+        <span className="hidden text-[10px] tracking-[0.16em] text-white/18 sm:inline">
+          {isDesktop ? 'Desktop Radio' : 'Webradio'}
+        </span>
       </div>
 
       <div className="flex items-center">

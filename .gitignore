@@ -1,6 +1,7 @@
 node_modules/
 out/
 dist/
+dist-web/
 preview/
 promo/node_modules/
 promo/renders/

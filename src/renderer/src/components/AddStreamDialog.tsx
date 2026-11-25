@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link2, X } from 'lucide-react'
 import { usePlayer } from '../store/player'
+import { isWebApp } from '../lib/env'
 import type { Station } from '../lib/types'
 import { Modal } from './Modal'
 
@@ -23,6 +24,10 @@ export function AddStreamDialog({ open, onClose }: { open: boolean; onClose: () 
     const trimmedUrl = url.trim()
     if (!/^https?:\/\//i.test(trimmedUrl)) {
       setError('Bitte eine vollständige Stream-URL mit http:// oder https:// eingeben.')
+      return
+    }
+    if (isWebApp && !/^https:\/\//i.test(trimmedUrl)) {
+      setError('Im Browser funktionieren nur https-Streams – http wird auf einer https-Seite blockiert.')
       return
     }
     let hostname = ''

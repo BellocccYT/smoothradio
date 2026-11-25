@@ -18,7 +18,8 @@ import {
   X
 } from 'lucide-react'
 import { usePlayer } from '../store/player'
-import { bridge } from '../lib/bridge'
+import { bridge, isDesktop } from '../lib/bridge'
+import { BRAND } from '@shared/brand'
 import { curatedStations, featuredStation } from '../lib/stations'
 import { cn, formatBitrate, stationColors } from '../lib/utils'
 import { LiveOrb } from './LiveOrb'
@@ -91,7 +92,7 @@ export function FullscreenPlayer(): React.JSX.Element {
     ? [...activeList.slice(currentIndex + 1), ...activeList.slice(0, Math.max(0, currentIndex))].slice(0, 5)
     : curatedStations.slice(1, 6)
 
-  const title = current ? current.name : 'Radio, aber smooth.'
+  const title = current ? current.name : BRAND.tagline
   const songTitle = nowPlaying?.title ?? (nowPlaying?.raw || '')
   const artist = nowPlaying?.artist ?? ''
   const VolumeIcon = muted || volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2
@@ -132,7 +133,7 @@ export function FullscreenPlayer(): React.JSX.Element {
           <Logo size={30} />
           <div>
             <p className="font-display text-[13px] font-semibold leading-tight tracking-[-0.01em] text-white/90">
-              SmoothRadio
+              {BRAND.name}
             </p>
             <p className="text-[8.5px] uppercase tracking-[0.24em] text-white/25">Fullscreen Player</p>
           </div>
@@ -146,9 +147,11 @@ export function FullscreenPlayer(): React.JSX.Element {
           >
             {osFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
           </ControlButton>
-          <ControlButton label="Minimieren" onClick={() => void bridge.window.minimize()} className="size-9">
-            <Minus size={14} />
-          </ControlButton>
+          {isDesktop && (
+            <ControlButton label="Minimieren" onClick={() => void bridge.window.minimize()} className="size-9">
+              <Minus size={14} />
+            </ControlButton>
+          )}
           <ControlButton label="Player schließen (Esc)" onClick={() => setFullscreen(false)} className="size-9">
             <X size={15} />
           </ControlButton>
@@ -186,7 +189,7 @@ export function FullscreenPlayer(): React.JSX.Element {
                 {isCurrent ? (isPlaying ? 'Jetzt live' : 'Pausiert') : 'Bereit'}
               </span>
               <span className="text-[10px] uppercase tracking-[0.18em] text-white/30">{station.country ?? 'Weltweit'}</span>
-              {discord.state === 'ready' && (
+              {isDesktop && discord.state === 'ready' && (
                 <span className="flex items-center gap-1.5 rounded-full border border-indigo-400/15 bg-indigo-500/10 px-2 py-1 text-[9px] font-medium text-indigo-200/80">
                   <DiscordIcon className="size-3" />
                   Discord live
@@ -215,7 +218,7 @@ export function FullscreenPlayer(): React.JSX.Element {
             <div className="mt-4 flex flex-wrap gap-1.5">
               {[
                 current ? formatBitrate(current.bitrate, current.codec, current.hls) : '24/7 live',
-                ...(current ? current.tags.slice(0, 3) : ['Ohne Konto', 'Handverlesen', 'Discord RPC'])
+                ...(current ? current.tags.slice(0, 3) : ['Ohne Konto', 'Handverlesen', isDesktop ? 'Discord RPC' : 'Werbefrei'])
               ].map((tag) => (
                 <span
                   key={tag}
