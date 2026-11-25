@@ -45,7 +45,17 @@ export function HomeView(): React.JSX.Element {
 
   return (
     <div className="px-4 pb-8 sm:px-7">
-      <Hero />
+      <section className="mt-1">
+        <SectionHeader
+          title="QuickLinks"
+          subtitle="Wetter, Nachrichten und private Suche – ohne Tracking."
+        />
+        <QuickLinks />
+      </section>
+
+      <div className="mt-7">
+        <Hero />
+      </div>
 
       <section className="mt-8">
         <SectionHeader
@@ -57,14 +67,6 @@ export function HomeView(): React.JSX.Element {
             <CompactRow key={station.id} station={station} queue={pinnedStations} />
           ))}
         </div>
-      </section>
-
-      <section className="mt-9">
-        <SectionHeader
-          title="QuickLinks"
-          subtitle="Wetter, Nachrichten und private Suche – ohne Tracking."
-        />
-        <QuickLinks />
       </section>
 
       {recents.length > 0 && (
