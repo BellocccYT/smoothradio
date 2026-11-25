@@ -53,11 +53,11 @@ export function HomeView(): React.JSX.Element {
         <QuickLinks />
       </section>
 
-      <div className="mt-7">
+      <div className="mt-4">
         <Hero />
       </div>
 
-      <section className="mt-8">
+      <section className="mt-5">
         <SectionHeader
           title="Deine Sender"
           subtitle="Harmony FM, DASDING, WDR 2 und 1LIVE – direkt reinhören."

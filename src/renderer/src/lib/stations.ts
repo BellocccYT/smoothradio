@@ -358,4 +358,5 @@ export function findGenre(id: string | null): Genre | undefined {
   return genres.find((genre) => genre.id === id)
 }
 
-export const featuredStation = curatedStations[0]
+export const featuredStation =
+  curatedStations.find((station) => station.id === 'curated-dasding') ?? curatedStations[0]

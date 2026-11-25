@@ -52,7 +52,7 @@ function WeatherCard(): React.JSX.Element {
   const load = (): void => {
     if (!('geolocation' in navigator)) {
       setState('error')
-      setMessage('Dieser Browser unterstützt keinen Standort.')
+      setMessage('Kein Standort verfügbar.')
       return
     }
     setState('loading')
@@ -94,10 +94,10 @@ function WeatherCard(): React.JSX.Element {
       (error) => {
         if (error.code === error.PERMISSION_DENIED) {
           setState('denied')
-          setMessage('Standortzugriff wurde abgelehnt.')
+          setMessage('Standortzugriff abgelehnt.')
         } else {
           setState('error')
-          setMessage('Standort ist gerade nicht verfügbar.')
+          setMessage('Standort nicht verfügbar.')
         }
       },
       { enableHighAccuracy: false, timeout: 10_000, maximumAge: 10 * 60 * 1000 }
@@ -108,65 +108,57 @@ function WeatherCard(): React.JSX.Element {
   const Icon = info?.Icon ?? MapPin
 
   return (
-    <div className="flex min-h-[136px] flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
-      <div className="flex items-center gap-2 text-[10.5px] font-medium uppercase tracking-[0.16em] text-white/35">
-        <Icon size={14} className="text-white/50" />
+    <div className="flex min-h-[100px] flex-col rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+      <div className="flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-white/35">
+        <Icon size={12} className="text-white/50" />
         Wetter
       </div>
 
       {state === 'ready' && weather && info ? (
         <>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-display text-[27px] font-semibold leading-none tracking-[-0.03em] text-white">
+          <div className="mt-1.5 flex items-baseline gap-1.5">
+            <span className="font-display text-[22px] font-semibold leading-none tracking-[-0.03em] text-white">
               {weather.temperature}°
             </span>
-            <span className="truncate text-[11.5px] text-white/45">{info.label}</span>
+            <span className="truncate text-[10.5px] text-white/45">{info.label}</span>
           </div>
-          <p className="mt-1 text-[10.5px] text-white/25">
-            Gefühlt {weather.apparent}° · Aktueller Standort
-          </p>
-          <div className="mt-auto flex items-center justify-between pt-2">
+          <p className="mt-1 text-[9px] text-white/25">Gefühlt {weather.apparent}° · Standort</p>
+          <div className="mt-auto flex items-center justify-between pt-1.5">
             <a
               href="https://open-meteo.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[9.5px] text-white/20 underline decoration-white/10 underline-offset-2 hover:text-white/45"
+              className="text-[8px] text-white/20 underline decoration-white/10 underline-offset-2 hover:text-white/45"
             >
-              Daten: Open-Meteo
+              Open-Meteo
             </a>
             <button
               type="button"
               onClick={load}
               aria-label="Wetter aktualisieren"
-              className="flex items-center gap-1 text-[10px] text-white/35 transition-colors hover:text-white/70"
+              className="flex items-center gap-1 text-[9px] text-white/35 transition-colors hover:text-white/70"
             >
-              <RefreshCw size={11} />
-              Aktualisieren
+              <RefreshCw size={10} />
+              Neu
             </button>
           </div>
         </>
       ) : (
         <>
-          <p className="mt-2 text-[12px] leading-snug text-white/55">
-            {state === 'loading'
-              ? 'Standort wird abgefragt …'
-              : state === 'denied' || state === 'error'
-                ? message
-                : 'Wetter am aktuellen Standort.'}
+          <p className="mt-1.5 text-[10.5px] leading-snug text-white/55">
+            {state === 'loading' ? 'Standort wird abgefragt …' : state === 'denied' || state === 'error' ? message : 'Wetter am Standort.'}
           </p>
-          <div className="mt-auto pt-3">
+          <div className="mt-auto pt-2">
             <button
               type="button"
               onClick={load}
               disabled={state === 'loading'}
-              className="flex h-8 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 text-[10.5px] font-medium text-white/60 transition-colors hover:border-white/20 hover:text-white disabled:opacity-50"
+              className="flex h-7 items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-2.5 text-[10px] font-medium text-white/60 transition-colors hover:border-white/20 hover:text-white disabled:opacity-50"
             >
-              {state === 'loading' ? <Loader2 size={11} className="animate-spin" /> : <MapPin size={11} />}
-              {state === 'denied' || state === 'error' ? 'Erneut versuchen' : 'Standort freigeben'}
+              {state === 'loading' ? <Loader2 size={10} className="animate-spin" /> : <MapPin size={10} />}
+              {state === 'denied' || state === 'error' ? 'Erneut' : 'Freigeben'}
             </button>
-            <p className="mt-2 text-[9px] leading-snug text-white/20">
-              Nur nach Klick · Standort wird nicht gespeichert.
-            </p>
+            <p className="mt-1.5 text-[8px] leading-snug text-white/20">Nur nach Klick · nicht gespeichert.</p>
           </div>
         </>
       )}
@@ -190,19 +182,16 @@ function LinkCard({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex min-h-[136px] flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-colors hover:border-white/15 hover:bg-white/[0.04]"
+      className="group flex min-h-[100px] flex-col rounded-xl border border-white/[0.06] bg-white/[0.02] p-3 transition-colors hover:border-white/15 hover:bg-white/[0.04]"
     >
-      <div className="flex items-center gap-2 text-[10.5px] font-medium uppercase tracking-[0.16em] text-white/35">
-        <Icon size={14} className="text-white/50" />
+      <div className="flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-white/35">
+        <Icon size={12} className="text-white/50" />
         {title}
       </div>
-      <p className="mt-2 text-[12px] leading-snug text-white/55">{subtitle}</p>
-      <div className="mt-auto flex items-center justify-between pt-3">
-        <span className="truncate text-[10px] text-white/25">{new URL(href).hostname.replace(/^www\./, '')}</span>
-        <ArrowUpRight
-          size={13}
-          className="shrink-0 text-white/25 transition-colors group-hover:text-white/70"
-        />
+      <p className="mt-1.5 text-[10.5px] leading-snug text-white/55">{subtitle}</p>
+      <div className="mt-auto flex items-center justify-between pt-2">
+        <span className="truncate text-[8.5px] text-white/25">{new URL(href).hostname.replace(/^www\./, '')}</span>
+        <ArrowUpRight size={11} className="shrink-0 text-white/25 transition-colors group-hover:text-white/70" />
       </div>
     </a>
   )
@@ -212,14 +201,14 @@ function PrivateSearchCard(): React.JSX.Element {
   const [query, setQuery] = useState('')
 
   return (
-    <div className="flex min-h-[136px] flex-col rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
-      <div className="flex items-center gap-2 text-[10.5px] font-medium uppercase tracking-[0.16em] text-white/35">
-        <Search size={14} className="text-white/50" />
+    <div className="flex min-h-[100px] flex-col rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
+      <div className="flex items-center gap-1.5 text-[9px] font-medium uppercase tracking-[0.14em] text-white/35">
+        <Search size={12} className="text-white/50" />
         Private Suche
       </div>
 
       <form
-        className="mt-3 flex gap-1.5"
+        className="mt-2 flex gap-1"
         onSubmit={(event) => {
           event.preventDefault()
           const trimmed = query.trim()
@@ -237,20 +226,18 @@ function PrivateSearchCard(): React.JSX.Element {
           placeholder="Suchen …"
           aria-label="Privat mit DuckDuckGo suchen"
           spellCheck={false}
-          className="h-8 min-w-0 flex-1 rounded-lg border border-white/[0.07] bg-black/30 px-2.5 text-[11.5px] text-white/85 outline-none transition-colors placeholder:text-white/25 focus:border-[var(--accent)]/40"
+          className="h-7 min-w-0 flex-1 rounded-lg border border-white/[0.07] bg-black/30 px-2 text-[10.5px] text-white/85 outline-none transition-colors placeholder:text-white/25 focus:border-[var(--accent)]/40"
         />
         <button
           type="submit"
           aria-label="Suche öffnen"
-          className="grid size-8 shrink-0 place-items-center rounded-lg bg-white/[0.08] text-white/60 transition-colors hover:bg-white/15 hover:text-white"
+          className="grid size-7 shrink-0 place-items-center rounded-lg bg-white/[0.08] text-white/60 transition-colors hover:bg-white/15 hover:text-white"
         >
-          <ArrowUpRight size={13} />
+          <ArrowUpRight size={11} />
         </button>
       </form>
 
-      <p className="mt-auto pt-2 text-[9px] leading-snug text-white/20">
-        Öffnet DuckDuckGo in einem neuen Tab.
-      </p>
+      <p className="mt-auto pt-1.5 text-[8px] leading-snug text-white/20">Öffnet DuckDuckGo in neuem Tab.</p>
     </div>
   )
 }
@@ -261,14 +248,14 @@ export function QuickLinks(): React.JSX.Element {
       <WeatherCard />
       <LinkCard
         title="Nachrichten"
-        subtitle="Focus – aktuelle Politik, Wirtschaft und Panorama."
+        subtitle="Focus – Politik, Wirtschaft und Panorama."
         href="https://www.focus.de/"
         icon={Newspaper}
       />
       <PrivateSearchCard />
       <LinkCard
         title="duck.ai"
-        subtitle="KI-Chat von DuckDuckGo – ohne Konto, anonymisiert."
+        subtitle="KI-Chat von DuckDuckGo – ohne Konto."
         href="https://duck.ai/"
         icon={Sparkles}
       />

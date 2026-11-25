@@ -1,8 +1,7 @@
 import { motion } from 'motion/react'
 import { ArrowUpRight, Heart, Loader2, Pause, Play, Radio } from 'lucide-react'
 import { usePlayer } from '../store/player'
-import { bridge, isDesktop } from '../lib/bridge'
-import { BRAND } from '@shared/brand'
+import { bridge } from '../lib/bridge'
 import { curatedStations, featuredStation } from '../lib/stations'
 import { cn, formatBitrate, stationColors } from '../lib/utils'
 import { LogoMark } from './Logo'
@@ -24,15 +23,13 @@ export function Hero(): React.JSX.Element {
   const isFavorite = favorites.some((item) => item.id === station.id)
   const isCurrent = Boolean(current) && current?.id === station.id
 
-  const title = current ? current.name : BRAND.tagline
+  const title = station.name
   const eyebrow = current ? (isPlaying ? 'Jetzt live' : 'Bereit zum Weiterhören') : 'Dein neuer Lieblingssender'
   const nowLine = nowPlaying
     ? nowPlaying.artist
       ? `${nowPlaying.artist} — ${nowPlaying.title}`
       : nowPlaying.raw
-    : current
-      ? current.description ?? 'Live-Stream'
-      : 'Handverlesene Sender, über 50.000 Streams. Ohne Konto, ohne Werbung, ohne Tracking.'
+    : station.description ?? 'Live-Stream'
 
   const handlePrimary = (): void => {
     if (current) void togglePlay()
@@ -54,7 +51,7 @@ export function Hero(): React.JSX.Element {
         <LogoMark size={420} />
       </div>
 
-      <div className="relative grid gap-6 px-5 py-6 sm:px-8 sm:py-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-center lg:py-9 xl:px-10">
+      <div className="relative grid gap-5 px-5 py-5 sm:px-8 sm:py-6 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-center lg:py-7 xl:px-10">
         <div className="max-w-[620px]">
           <div className="flex items-center gap-2.5">
             <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/60 backdrop-blur">
@@ -66,7 +63,7 @@ export function Hero(): React.JSX.Element {
               />
               {eyebrow}
             </span>
-            {current?.curated && (
+            {station.curated && (
               <span className="rounded-full border border-white/[0.07] px-2 py-0.5 text-[9px] uppercase tracking-[0.16em] text-white/25">
                 Kuratiert
               </span>
@@ -78,7 +75,7 @@ export function Hero(): React.JSX.Element {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: 'spring', stiffness: 260, damping: 28 }}
-            className="font-display mt-3.5 text-[clamp(30px,3.6vw,44px)] font-semibold leading-[1.04] tracking-[-0.035em] text-white"
+            className="font-display mt-3 text-[clamp(28px,3.2vw,40px)] font-semibold leading-[1.04] tracking-[-0.035em] text-white"
           >
             {title}
           </motion.h2>
@@ -93,38 +90,23 @@ export function Hero(): React.JSX.Element {
           </p>
 
           <div className="mt-3 flex flex-wrap items-center gap-1.5">
-            {current ? (
-              <>
-                <span className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45">
-                  {formatBitrate(current.bitrate, current.codec, current.hls)}
-                </span>
-                <span className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45">
-                  {current.country ?? 'Weltweit'}
-                </span>
-                {current.tags.slice(0, 2).map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </>
-            ) : (
-              <>
-                {['24/7 live', 'Kein Account nötig', isDesktop ? 'Discord RPC' : 'Werbefrei'].map((chip) => (
-                  <span
-                    key={chip}
-                    className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45"
-                  >
-                    {chip}
-                  </span>
-                ))}
-              </>
-            )}
+            <span className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45">
+              {formatBitrate(station.bitrate, station.codec, station.hls)}
+            </span>
+            <span className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45">
+              {station.country ?? 'Weltweit'}
+            </span>
+            {station.tags.slice(0, 2).map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-white/[0.07] bg-black/20 px-2.5 py-1 text-[10px] text-white/45"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center gap-2.5">
+          <div className="mt-5 flex flex-wrap items-center gap-2.5">
             <button
               type="button"
               onClick={handlePrimary}
@@ -181,7 +163,7 @@ export function Hero(): React.JSX.Element {
         </div>
 
         <div className="hidden justify-center lg:flex">
-          <LiveOrb station={station} playing={isPlaying && isCurrent} className="size-[290px]" />
+          <LiveOrb station={station} playing={isPlaying && isCurrent} className="size-[240px]" />
         </div>
       </div>
     </section>

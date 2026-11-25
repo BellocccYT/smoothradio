@@ -2,9 +2,13 @@ import type { Station } from './types'
 import { findIcyMirror } from './radioBrowser'
 import { bridge } from './bridge'
 import { isHlsUrl } from './utils'
+import { isWebApp } from './env'
+import { fetchWebTrack } from './nowPlaying'
+import { usePlayer } from '../store/player'
 
 let activeId: string | null = null
 let timer: number | null = null
+let webTimer: number | null = null
 let token = 0
 
 /**
@@ -21,10 +25,27 @@ export function syncMetadata(station: Station | null): void {
     window.clearTimeout(timer)
     timer = null
   }
+  if (webTimer !== null) {
+    window.clearInterval(webTimer)
+    webTimer = null
+  }
   const currentToken = ++token
 
   if (!station) {
     void bridge.metadata.unsubscribe()
+    return
+  }
+
+  // Im Browser gibt es keinen ICY-Zugriff. Sender mit öffentlicher JSON-API
+  // werden direkt abgefragt; alle anderen bleiben ohne Live-Titel.
+  if (isWebApp) {
+    const load = async (): Promise<void> => {
+      const track = await fetchWebTrack(station)
+      if (currentToken !== token) return
+      usePlayer.getState().setNowPlaying(track)
+    }
+    void load()
+    webTimer = window.setInterval(() => void load(), 20_000)
     return
   }
 

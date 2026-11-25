@@ -96,7 +96,7 @@ Die Domain bleibt bei Strato; es ist kein Umzug und kein Nameserver-Wechsel nöt
 | Feature | Grund |
 |---|---|
 | Discord Rich Presence | Kein IPC im Browser; nur Desktop-App |
-| Echte Songtitel (ICY) | Browser kann keine ICY-Header lesen. Ein Metadata-Proxy wäre möglich, ist aber zusätzliche Infrastruktur und sollte rechtlich geprüft werden |
+| Echte Songtitel (ICY) | Browser kann keine ICY-Header lesen. Für Harmony FM, DASDING, WDR 2 und 1LIVE werden die Titel über offizielle JSON-/Text-Schnittstellen geladen; alle anderen Sender bleiben ohne Live-Titel |
 | http-Streams | Mixed Content wird von Browsern blockiert |
 | Tray, Autostart, Media-Tasten | Electron-Features |
 | Aufnahmen/Downloads | Urheberrechtlich heikel — bewusst nicht eingebaut |

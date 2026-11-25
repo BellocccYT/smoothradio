@@ -68,7 +68,10 @@ export function LegalDialog({ open, onClose }: { open: boolean; onClose: () => v
             IP-Adresse an die Radio-Browser-Server übertragen. Beim Abspielen verbindet sich dein Browser{' '}
             <span className="text-white/60">direkt</span> mit dem Stream-Server des jeweiligen Senders; auch dieser
             erhält deine IP-Adresse. Es findet keine Weiterleitung oder Aufzeichnung über unseren Server statt.
-            Sender-Logos werden, sofern vorhanden, direkt vom jeweiligen Sender geladen.
+            Sender-Logos werden, sofern vorhanden, direkt vom jeweiligen Sender geladen. Für die Sender auf der
+            Startseite (Harmony FM, DASDING, WDR 2 und 1LIVE) wird der aktuelle Titel über eine öffentliche
+            JSON- bzw. Text-Schnittstelle des Senders abgerufen; auch dabei wird deine IP-Adresse an den Sender
+            übertragen.
           </p>
         </section>
 
