@@ -4,6 +4,8 @@ export interface Station {
   url: string
   homepage?: string
   favicon?: string
+  /** Hellt das Artwork auf, damit dunkle Wortmarken lesbar bleiben. */
+  logoBackground?: 'light'
   tags: string[]
   country?: string
   codec?: string
