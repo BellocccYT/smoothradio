@@ -234,6 +234,20 @@ export const curatedStations: Station[] = [
     description: 'Der WDR-Mix aus Pop, Rock und Information – Region Ostwestfalen-Lippe.'
   },
   {
+    id: 'curated-jamfm',
+    name: 'JAM FM',
+    url: 'https://stream.jam.fm/jamfm-live/mp3-192',
+    homepage: 'https://www.jam.fm/',
+    favicon: './jamfm.svg',
+    logoBackground: 'light',
+    tags: ['Dance', 'Charts', 'Berlin'],
+    country: 'Deutschland',
+    codec: 'MP3',
+    bitrate: 192,
+    curated: true,
+    description: 'Frische Dance- und Chart-Hits aus Berlin – direkt von JAM FM.'
+  },
+  {
     id: 'curated-dasding',
     name: 'DASDING',
     url: 'https://liveradio.swr.de/sw282p3/dasding/',
@@ -337,7 +351,13 @@ export const curatedStations: Station[] = [
  * Teil von `curatedStations` und sind damit auch über Suche und Favoriten
  * erreichbar.
  */
-const pinnedIds = ['curated-harmonyfm', 'curated-dasding', 'curated-wdr2', 'curated-einslive'] as const
+const pinnedIds = [
+  'curated-jamfm',
+  'curated-harmonyfm',
+  'curated-dasding',
+  'curated-wdr2',
+  'curated-einslive'
+] as const
 
 export const pinnedStations: Station[] = pinnedIds
   .map((id) => curatedStations.find((station) => station.id === id))

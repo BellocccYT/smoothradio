@@ -60,9 +60,9 @@ export function HomeView(): React.JSX.Element {
       <section className="mt-5">
         <SectionHeader
           title="Deine Sender"
-          subtitle="Harmony FM, DASDING, WDR 2 und 1LIVE – direkt reinhören."
+          subtitle="JAM FM, Harmony FM, DASDING, WDR 2 und 1LIVE – direkt reinhören."
         />
-        <div className="grid gap-1.5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-1.5 sm:grid-cols-2 xl:grid-cols-5">
           {pinnedStations.map((station) => (
             <CompactRow key={station.id} station={station} queue={pinnedStations} />
           ))}

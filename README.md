@@ -14,7 +14,7 @@ Ein Webradio für Desktop und Browser — handverlesene Sender, Live-Metadaten, 
 
 - **Entdecken** — kuratierte Sender (SomaFM, Radio Paradise, FIP, KEXP, 1LIVE, DLF, Nightride …) plus ~50.000 Sender über die Radio-Browser-API
 - **Suche & Genres** — nach Name, Stadt oder Stimmung; acht Genre-Welten
-- **Live-Metadaten** — aktuelle Songs via ICY-StreamTitle, automatisch aktualisiert; HLS-Sender wie WDR 2 nutzen automatisch einen MP3-Spiegel *(nur Desktop)*
+- **Live-Metadaten** — aktuelle Songs via ICY-StreamTitle; im Browser über öffentliche Sender-APIs (u. a. JAM FM, SomaFM, KEXP, WDR); HLS-Sender wie WDR 2 nutzen automatisch einen MP3-Spiegel *(Desktop)*
 - **Discord Rich Presence** — Sender, Song und Live-Status im Discord-Profil, inkl. Sender-Button *(nur Desktop)*
 - **Favoriten, Verlauf, eigene Streams** — lokal gespeichert, kein Konto nötig
 - **Fullscreen-Player** — ein immersiver Now-Playing-Modus mit riesigem Vinyl-Artwork, Live-Spektrum, Queue und Discord-Status (`F`)
@@ -40,7 +40,7 @@ Das Ergebnis in `dist-web/` ist reines Static Hosting: HTML, JS, CSS, Fonts, `ro
 | | Desktop | Website |
 |---|---|---|
 | Discord Rich Presence | ✅ | — (kein IPC im Browser) |
-| Echte Songtitel (ICY) | ✅ | — (Browser kann keine ICY-Header lesen) |
+| Live-Titel | ✅ (ICY) | ✅ für Sender mit öffentlicher API |
 | http-Streams | ✅ | — (Mixed Content wird blockiert) |
 | Tray, Autostart, Media-Tasten | ✅ | — |
 | Favoriten, Verlauf, eigene Sender | ✅ | ✅ (localStorage) |
